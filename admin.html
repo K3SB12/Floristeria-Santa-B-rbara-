@@ -393,121 +393,6 @@
             cursor: pointer;
             color: #666;
         }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 70px;
-                overflow: hidden;
-            }
-            
-            .sidebar:hover {
-                width: 250px;
-            }
-            
-            .sidebar-header h3,
-            .sidebar-header p,
-            .sidebar-menu a span {
-                display: none;
-            }
-            
-            .sidebar:hover .sidebar-header h3,
-            .sidebar:hover .sidebar-header p,
-            .sidebar:hover .sidebar-menu a span {
-                display: block;
-            }
-            
-            .main-content {
-                margin-left: 70px;
-            }
-            
-            .sidebar:hover + .main-content {
-                margin-left: 250px;
-            }
-        }
-        
-        /* Toggle Switch */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 30px;
-        }
-        
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-        }
-        
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 22px;
-            width: 22px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-        }
-        
-        input:checked + .slider {
-            background-color: var(--primary-green);
-        }
-        
-        input:checked + .slider:before {
-            transform: translateX(30px);
-        }
-        
-        .slider.round {
-            border-radius: 34px;
-        }
-        
-        .slider.round:before {
-            border-radius: 50%;
-        }
-        
-        /* Color Picker */
-        .color-picker {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid transparent;
-        }
-        
-        .color-option.selected {
-            border-color: #333;
-            transform: scale(1.1);
-        }
-        
-        /* Date Range */
-        .date-range {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-        
-        .date-range input {
-            flex: 1;
-        }
     </style>
 </head>
 <body>
@@ -656,6 +541,7 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
+                                <th>Código</th>
                                 <th>Imagen</th>
                                 <th>Nombre</th>
                                 <th>Categoría</th>
@@ -698,9 +584,7 @@
                         <input type="file" id="fileInput" multiple accept="image/*" style="display: none;" onchange="previewImages(event)">
                     </div>
                     
-                    <div class="image-preview" id="imagePreview">
-                        <!-- Vista previa de imágenes -->
-                    </div>
+                    <div class="image-preview" id="imagePreview"></div>
                     
                     <div class="form-group mt-3">
                         <label class="form-label">Categoría de las fotos</label>
@@ -709,7 +593,13 @@
                             <option value="local">Local</option>
                             <option value="eventos">Eventos</option>
                             <option value="trabajos">Trabajos Realizados</option>
+                            <option value="clientes">Clientes Felices</option>
                         </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Nombre/Descripción</label>
+                        <input type="text" id="nombreFoto" class="form-control" placeholder="Ej: Ramos de rosas rojas">
                     </div>
                     
                     <button class="btn btn-primary" onclick="subirFotos()" id="btnSubirFotos" disabled>
@@ -719,17 +609,13 @@
                 
                 <!-- Ver Galería -->
                 <div id="galeria" class="gallery-tab">
-                    <div class="row" id="galeriaFotos">
-                        <!-- Fotos cargadas -->
-                    </div>
+                    <div class="row" id="galeriaFotos"></div>
                 </div>
                 
                 <!-- Fotos Destacadas -->
                 <div id="destacados" class="gallery-tab">
                     <p>Selecciona las fotos que quieres mostrar en la página principal</p>
-                    <div class="row" id="fotosDestacadas">
-                        <!-- Fotos destacadas -->
-                    </div>
+                    <div class="row" id="fotosDestacadas"></div>
                 </div>
             </div>
         </div>
@@ -762,9 +648,7 @@
                                 <th>Acciones</th>
                             </tr>
                         </thead>
-                        <tbody id="tablaPrecios">
-                            <!-- Se llena con JavaScript -->
-                        </tbody>
+                        <tbody id="tablaPrecios"></tbody>
                     </table>
                 </div>
             </div>
@@ -792,9 +676,7 @@
                                         <th>Acciones</th>
                                     </tr>
                                 </thead>
-                                <tbody id="tablaTemporadas">
-                                    <!-- Se llena con JavaScript -->
-                                </tbody>
+                                <tbody id="tablaTemporadas"></tbody>
                             </table>
                         </div>
                     </div>
@@ -817,9 +699,7 @@
                         
                         <div class="form-group">
                             <label class="form-label">Categorías para esta Temporada</label>
-                            <div id="categoriasTemporada">
-                                <!-- Se llena con JavaScript -->
-                            </div>
+                            <div id="categoriasTemporada"></div>
                         </div>
                         
                         <button class="btn btn-primary" onclick="guardarTemporada()">
@@ -849,6 +729,7 @@
                         <div class="form-group">
                             <label class="form-label">Teléfono de WhatsApp</label>
                             <input type="text" id="whatsappNumber" class="form-control" value="573001234567">
+                            <small class="text-muted">Formato: 573001234567 (sin +)</small>
                         </div>
                         
                         <div class="form-group">
@@ -860,48 +741,34 @@
                             <label class="form-label">Dirección</label>
                             <textarea id="direccion" class="form-control" rows="3">Av. Principal #123, Ciudad</textarea>
                         </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Teléfono Fijo</label>
+                            <input type="text" id="telefonoFijo" class="form-control" value="(123) 456-7890">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email de Contacto</label>
+                            <input type="email" id="emailContacto" class="form-control" value="info@floristeriasantabarbara.com">
+                        </div>
                     </div>
                     
                     <div class="col-md-6">
-                        <h4>Configuración del Sitio Web</h4>
+                        <h4>Redes Sociales</h4>
                         <div class="form-group">
-                            <label class="form-label">Colores Principales</label>
-                            <div class="color-picker">
-                                <div class="color-option selected" style="background: #2e7d32;" data-color="#2e7d32"></div>
-                                <div class="color-option" style="background: #e91e63;" data-color="#e91e63"></div>
-                                <div class="color-option" style="background: #2196f3;" data-color="#2196f3"></div>
-                                <div class="color-option" style="background: #9c27b0;" data-color="#9c27b0"></div>
-                                <div class="color-option" style="background: #ff9800;" data-color="#ff9800"></div>
-                            </div>
+                            <label class="form-label">Facebook</label>
+                            <input type="text" id="facebook" class="form-control" placeholder="https://facebook.com/tufloristeria">
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">Logo del Sitio</label>
-                            <input type="file" id="logoUpload" class="form-control" accept="image/*">
-                            <small class="text-muted">Recomendado: 200x200px PNG transparente</small>
+                            <label class="form-label">Instagram</label>
+                            <input type="text" id="instagram" class="form-control" placeholder="@tufloristeria">
                         </div>
                         
                         <div class="form-group">
-                            <label class="form-label">URL del Sitio Web</label>
-                            <input type="text" id="urlSitio" class="form-control" readonly value="https://k3sb12.github.io/Floristeria-Santa-B-rbara-/">
+                            <label class="form-label">TikTok</label>
+                            <input type="text" id="tiktok" class="form-control" placeholder="@tufloristeria">
                         </div>
-                    </div>
-                </div>
-                
-                <div class="mt-4">
-                    <h4>Opciones Avanzadas</h4>
-                    <div class="form-group">
-                        <label class="form-label">
-                            <input type="checkbox" id="mantenimiento"> Modo Mantenimiento
-                            <small class="text-muted">(El sitio no será visible para el público)</small>
-                        </label>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">
-                            <input type="checkbox" id="cache"> Limpiar Cache del Sitio
-                            <small class="text-muted">(Forzar actualización para todos los visitantes)</small>
-                        </label>
                     </div>
                 </div>
                 
@@ -939,11 +806,6 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Imagen de la Categoría</label>
-                    <input type="file" id="categoriaImagen" class="form-control" accept="image/*">
-                </div>
-                
-                <div class="form-group">
                     <label class="form-label">Estado</label>
                     <label class="switch">
                         <input type="checkbox" id="categoriaEstado" checked>
@@ -956,7 +818,6 @@
                     <label class="form-label">Solo en Temporada</label>
                     <select id="categoriaTemporada" class="form-control">
                         <option value="">Todo el año</option>
-                        <!-- Se llena con JavaScript -->
                     </select>
                 </div>
                 
@@ -977,20 +838,27 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
+                    <label class="form-label">Código Único *</label>
+                    <input type="text" id="productoCodigo" class="form-control" 
+                           placeholder="Ej: SB-ROS-006-R, SB-ARR-TROP" 
+                           pattern="[A-Z0-9\-]+" 
+                           title="Usa letras mayúsculas, números y guiones">
+                    <small class="text-muted">Este código aparece en WhatsApp. Ej: SB para Santa Bárbara, ROS para Rosas, 006 para 6 unidades, R para Rojas</small>
+                </div>
+                
+                <div class="form-group">
                     <label class="form-label">Nombre del Producto *</label>
-                    <input type="text" id="productoNombre" class="form-control" placeholder="Ej: Ramo de Rosas Rojas">
+                    <input type="text" id="productoNombre" class="form-control" placeholder="Ej: Ramo de 6 Rosas Rojas Premium">
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Categoría *</label>
-                    <select id="productoCategoria" class="form-control">
-                        <!-- Se llena con JavaScript -->
-                    </select>
+                    <select id="productoCategoria" class="form-control"></select>
                 </div>
                 
                 <div class="form-group">
                     <label class="form-label">Descripción</label>
-                    <textarea id="productoDescripcion" class="form-control" rows="3" placeholder="Describe el producto"></textarea>
+                    <textarea id="productoDescripcion" class="form-control" rows="3" placeholder="Describe el producto detalladamente"></textarea>
                 </div>
                 
                 <div class="form-group">
@@ -1004,8 +872,23 @@
                 </div>
                 
                 <div class="form-group">
-                    <label class="form-label">Imágenes del Producto</label>
-                    <input type="file" id="productoImagenes" class="form-control" accept="image/*" multiple>
+                    <label class="form-label">Estado</label>
+                    <label class="switch">
+                        <input type="checkbox" id="productoEstado" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span id="productoEstadoTexto">Activo</span>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Imágenes del Producto (URL)</label>
+                    <div class="input-group mb-2">
+                        <input type="text" id="productoImagenUrl" class="form-control" placeholder="https://ejemplo.com/imagen.jpg">
+                        <button class="btn btn-outline-secondary" type="button" onclick="agregarImagenProducto()">
+                            <i class="fas fa-plus"></i> Agregar
+                        </button>
+                    </div>
+                    <small class="text-muted">Pega la URL de la imagen o sube al panel de Galería primero</small>
                     <div id="productoImagenesPreview" class="image-preview"></div>
                 </div>
                 
@@ -1055,9 +938,7 @@
                 
                 <div class="form-group" id="reglaCategoriaContainer" style="display: none;">
                     <label class="form-label">Seleccionar Categoría</label>
-                    <select id="reglaCategoria" class="form-control">
-                        <!-- Se llena con JavaScript -->
-                    </select>
+                    <select id="reglaCategoria" class="form-control"></select>
                 </div>
                 
                 <div class="form-group">
@@ -1079,7 +960,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Sistema de almacenamiento local (simula base de datos)
+        // Sistema de almacenamiento
         let sistema = {
             categorias: [],
             productos: [],
@@ -1090,15 +971,23 @@
             actividad: []
         };
 
-        // Cargar datos del localStorage
+        // Variables para edición
+        let categoriaEditando = null;
+        let productoEditando = null;
+        let productoImagenes = [];
+        let fotosParaSubir = [];
+
+        // Cargar datos
         function cargarDatos() {
+            // Intentar cargar desde localStorage
             const datos = localStorage.getItem('floristeria_sistema');
             if (datos) {
                 sistema = JSON.parse(datos);
             } else {
-                // Datos de ejemplo iniciales
-                inicializarDatosEjemplo();
+                // Intentar cargar desde archivo JSON
+                cargarDatosDesdeJSON();
             }
+            
             actualizarDashboard();
             cargarCategorias();
             cargarProductos();
@@ -1108,49 +997,51 @@
             cargarConfiguracion();
         }
 
+        // Cargar datos desde archivo JSON
+        async function cargarDatosDesdeJSON() {
+            try {
+                const response = await fetch('data/sistema.json');
+                if (response.ok) {
+                    const datos = await response.json();
+                    sistema = datos;
+                    // Guardar en localStorage para futuras visitas
+                    localStorage.setItem('floristeria_sistema', JSON.stringify(datos));
+                } else {
+                    inicializarDatosEjemplo();
+                }
+            } catch (error) {
+                console.warn('No se pudo cargar data/sistema.json, usando datos de ejemplo');
+                inicializarDatosEjemplo();
+            }
+        }
+
         function inicializarDatosEjemplo() {
-            sistema.categorias = [
-                { id: 1, nombre: "Rosas", descripcion: "Rosas de todos los colores", estado: true, temporada: "" },
-                { id: 2, nombre: "Arreglos", descripcion: "Arreglos florales personalizados", estado: true, temporada: "" },
-                { id: 3, nombre: "Plantas", descripcion: "Plantas de interior y exterior", estado: true, temporada: "" },
-                { id: 4, nombre: "Navidad", descripcion: "Productos especiales para Navidad", estado: false, temporada: "navidad" }
-            ];
-
-            sistema.productos = [
-                { id: 1, nombre: "Ramo de Rosas Rojas", categoria: "Rosas", precio: 45000, stock: 15, estado: true, imagenes: [], descripcion: "Clásico ramo de 12 rosas rojas" },
-                { id: 2, nombre: "Arreglo Tropical", categoria: "Arreglos", precio: 55000, stock: 8, estado: true, imagenes: [], descripcion: "Colorido arreglo con flores exóticas" },
-                { id: 3, nombre: "Centro de Mesa Elegante", categoria: "Arreglos", precio: 65000, stock: 5, estado: true, imagenes: [], descripcion: "Exquisito centro de mesa para eventos" },
-                { id: 4, nombre: "Cesta de Girasoles", categoria: "Arreglos", precio: 40000, stock: 10, estado: true, imagenes: [], descripcion: "Radiante cesta con girasoles frescos" }
-            ];
-
-            sistema.temporadas = [
-                { id: 1, nombre: "Navidad 2024", inicio: "2024-12-01", fin: "2024-12-31", categorias: ["Navidad"], estado: false },
-                { id: 2, nombre: "San Valentín 2025", inicio: "2025-02-01", fin: "2025-02-14", categorias: ["Rosas", "Arreglos"], estado: true }
-            ];
-
-            sistema.reglasPrecio = [
-                { id: 1, nombre: "Descuento Navidad", tipo: "descuento", valor: 15, aplicar: "categoria", categoria: "Navidad", inicio: "2024-12-01", fin: "2024-12-31", estado: true },
-                { id: 2, nombre: "Aumento San Valentín", tipo: "aumento", valor: 10, aplicar: "todos", inicio: "2025-02-01", fin: "2025-02-14", estado: true }
-            ];
-
-            sistema.configuracion = {
-                nombreNegocio: "Floristería Santa Bárbara",
-                whatsapp: "573001234567",
-                horario: "Lunes a Sábado 8am - 7pm",
-                direccion: "Av. Principal #123, Ciudad",
-                colorPrincipal: "#2e7d32"
+            sistema = {
+                categorias: [
+                    { id: 1, nombre: "Rosas", descripcion: "Rosas de todos los colores", estado: true, temporada: "" },
+                    { id: 2, nombre: "Arreglos", descripcion: "Arreglos florales personalizados", estado: true, temporada: "" },
+                    { id: 3, nombre: "Plantas", descripcion: "Plantas de interior y exterior", estado: true, temporada: "" }
+                ],
+                productos: [],
+                fotos: [],
+                temporadas: [],
+                reglasPrecio: [],
+                configuracion: {
+                    nombreNegocio: "Floristería Santa Bárbara",
+                    whatsapp: "573001234567",
+                    horario: "Lunes a Sábado 8am - 7pm",
+                    direccion: "Av. Principal #123, Ciudad"
+                },
+                actividad: []
             };
-
-            sistema.actividad = [
-                { accion: "Producto creado", detalle: "Ramo de Rosas Rojas", fecha: new Date().toISOString() },
-                { accion: "Categoría creada", detalle: "Rosas", fecha: new Date().toISOString() }
-            ];
-
+            
             guardarDatos();
         }
 
         function guardarDatos() {
             localStorage.setItem('floristeria_sistema', JSON.stringify(sistema));
+            // Disparar evento para que index.html se actualice
+            window.dispatchEvent(new Event('storage'));
         }
 
         function agregarActividad(accion, detalle) {
@@ -1159,11 +1050,39 @@
                 detalle,
                 fecha: new Date().toISOString()
             });
-            // Mantener solo las últimas 10 actividades
             sistema.actividad = sistema.actividad.slice(0, 10);
             guardarDatos();
             cargarActividadReciente();
         }
+
+        // Sistema de tabs
+        document.querySelectorAll('.sidebar-menu a').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelectorAll('.sidebar-menu a').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Tabs de galería
+        document.querySelectorAll('[data-gallery-tab]').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-gallery-tab');
+                document.querySelectorAll('[data-gallery-tab]').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                document.querySelectorAll('.gallery-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
 
         // Dashboard
         function actualizarDashboard() {
@@ -1172,7 +1091,7 @@
             document.getElementById('totalFotos').textContent = sistema.fotos.length;
             document.getElementById('temporadasActivas').textContent = sistema.temporadas.filter(t => t.estado).length;
 
-            // Gráfico de productos por categoría
+            // Gráfico
             const ctx = document.createElement('canvas');
             document.getElementById('productosPorCategoria').innerHTML = '';
             document.getElementById('productosPorCategoria').appendChild(ctx);
@@ -1192,14 +1111,7 @@
                         backgroundColor: categorias.map(() => `hsl(${Math.random() * 360}, 70%, 70%)`)
                     }]
                 },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
+                options: { responsive: true, plugins: { legend: { display: false } } }
             });
 
             cargarActividadReciente();
@@ -1228,49 +1140,7 @@
             });
         }
 
-        // Sistema de tabs
-        document.querySelectorAll('.sidebar-menu a').forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // Actualizar tabs activos
-                document.querySelectorAll('.sidebar-menu a').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Mostrar contenido correspondiente
-                const tabId = this.getAttribute('data-tab');
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                document.getElementById(tabId).classList.add('active');
-                
-                // Actualizar título de la página
-                document.title = `Floristería Santa Bárbara | ${this.querySelector('span').textContent}`;
-            });
-        });
-
-        // Tabs de galería
-        document.querySelectorAll('[data-gallery-tab]').forEach(button => {
-            button.addEventListener('click', function() {
-                const tabId = this.getAttribute('data-gallery-tab');
-                
-                // Actualizar botones activos
-                document.querySelectorAll('[data-gallery-tab]').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                this.classList.add('active');
-                
-                // Mostrar contenido correspondiente
-                document.querySelectorAll('.gallery-tab').forEach(tab => {
-                    tab.classList.remove('active');
-                });
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-
         // Categorías
-        let categoriaEditando = null;
-
         function cargarCategorias() {
             const tbody = document.getElementById('tablaCategorias');
             tbody.innerHTML = '';
@@ -1301,8 +1171,6 @@
                     </tr>
                 `;
             });
-            
-            actualizarDashboard();
         }
 
         function mostrarModalCategoria(editarId = null) {
@@ -1313,7 +1181,6 @@
             if (editarId) {
                 titulo.textContent = 'Editar Categoría';
                 const categoria = sistema.categorias.find(c => c.id === editarId);
-                
                 document.getElementById('categoriaNombre').value = categoria.nombre;
                 document.getElementById('categoriaDescripcion').value = categoria.descripcion;
                 document.getElementById('categoriaEstado').checked = categoria.estado;
@@ -1350,7 +1217,6 @@
             }
             
             if (categoriaEditando) {
-                // Editar categoría existente
                 const index = sistema.categorias.findIndex(c => c.id === categoriaEditando);
                 sistema.categorias[index] = {
                     ...sistema.categorias[index],
@@ -1359,10 +1225,8 @@
                     estado,
                     temporada
                 };
-                
                 agregarActividad('Categoría actualizada', nombre);
             } else {
-                // Nueva categoría
                 const nuevoId = sistema.categorias.length > 0 ? 
                     Math.max(...sistema.categorias.map(c => c.id)) + 1 : 1;
                 
@@ -1373,7 +1237,6 @@
                     estado,
                     temporada
                 });
-                
                 agregarActividad('Categoría creada', nombre);
             }
             
@@ -1387,32 +1250,21 @@
         }
 
         function eliminarCategoria(id) {
-            if (confirm('¿Estás seguro de eliminar esta categoría? Los productos asociados quedarán sin categoría.')) {
+            if (confirm('¿Estás seguro de eliminar esta categoría?')) {
                 sistema.categorias = sistema.categorias.filter(c => c.id !== id);
-                
-                // Actualizar productos que tenían esta categoría
-                sistema.productos.forEach(producto => {
-                    if (producto.categoria === sistema.categorias.find(c => c.id === id)?.nombre) {
-                        producto.categoria = '';
-                    }
-                });
-                
                 guardarDatos();
                 cargarCategorias();
-                cargarProductos();
                 agregarActividad('Categoría eliminada', `ID: ${id}`);
             }
         }
 
         // Productos
-        let productoEditando = null;
-
         function cargarProductos() {
             const tbody = document.getElementById('tablaProductos');
             tbody.innerHTML = '';
             
             sistema.productos.forEach(producto => {
-                // Calcular precio actual considerando reglas activas
+                // Calcular precio actual
                 let precioActual = producto.precio;
                 const hoy = new Date().toISOString().split('T')[0];
                 
@@ -1435,6 +1287,7 @@
                 tbody.innerHTML += `
                     <tr>
                         <td>${producto.id}</td>
+                        <td><strong>${producto.codigo || 'Sin código'}</strong></td>
                         <td>
                             ${producto.imagenes && producto.imagenes.length > 0 ? 
                                 `<img src="${producto.imagenes[0]}" width="50" height="50" style="object-fit: cover; border-radius: 5px;">` : 
@@ -1450,7 +1303,7 @@
                                 ${producto.estado ? 'Activo' : 'Inactivo'}
                             </span>
                         </td>
-                        <td>${producto.stock}</td>
+                        <td>${producto.stock || 0}</td>
                         <td>
                             <button class="btn btn-sm btn-warning" onclick="editarProducto(${producto.id})">
                                 <i class="fas fa-edit"></i>
@@ -1471,7 +1324,7 @@
             const modal = document.getElementById('modalProducto');
             const titulo = document.getElementById('modalProductoTitulo');
             
-            // Cargar categorías en select
+            // Cargar categorías
             const selectCategoria = document.getElementById('productoCategoria');
             selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
             sistema.categorias.filter(c => c.estado).forEach(categoria => {
@@ -1482,83 +1335,109 @@
                 titulo.textContent = 'Editar Producto';
                 const producto = sistema.productos.find(p => p.id === editarId);
                 
+                document.getElementById('productoCodigo').value = producto.codigo || '';
                 document.getElementById('productoNombre').value = producto.nombre;
                 document.getElementById('productoCategoria').value = producto.categoria;
                 document.getElementById('productoDescripcion').value = producto.descripcion;
                 document.getElementById('productoPrecio').value = producto.precio;
-                document.getElementById('productoStock').value = producto.stock;
+                document.getElementById('productoStock').value = producto.stock || 0;
+                document.getElementById('productoEstado').checked = producto.estado;
+                document.getElementById('productoEstadoTexto').textContent = producto.estado ? 'Activo' : 'Inactivo';
                 
                 // Mostrar imágenes existentes
-                const preview = document.getElementById('productoImagenesPreview');
-                preview.innerHTML = '';
-                if (producto.imagenes && producto.imagenes.length > 0) {
-                    producto.imagenes.forEach((img, index) => {
-                        preview.innerHTML += `
-                            <div class="preview-image">
-                                <img src="${img}" alt="Imagen ${index + 1}">
-                                <button class="remove-btn" onclick="eliminarImagenProducto(${editarId}, ${index})">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        `;
-                    });
-                }
+                productoImagenes = producto.imagenes || [];
+                actualizarImagenesPreview();
             } else {
                 titulo.textContent = 'Nuevo Producto';
+                document.getElementById('productoCodigo').value = '';
                 document.getElementById('productoNombre').value = '';
                 document.getElementById('productoCategoria').value = '';
                 document.getElementById('productoDescripcion').value = '';
                 document.getElementById('productoPrecio').value = '';
                 document.getElementById('productoStock').value = '10';
+                document.getElementById('productoEstado').checked = true;
+                document.getElementById('productoEstadoTexto').textContent = 'Activo';
+                productoImagenes = [];
                 document.getElementById('productoImagenesPreview').innerHTML = '';
             }
             
             modal.style.display = 'block';
         }
 
+        function agregarImagenProducto() {
+            const url = document.getElementById('productoImagenUrl').value.trim();
+            if (url) {
+                productoImagenes.push(url);
+                actualizarImagenesPreview();
+                document.getElementById('productoImagenUrl').value = '';
+            }
+        }
+
+        function actualizarImagenesPreview() {
+            const preview = document.getElementById('productoImagenesPreview');
+            preview.innerHTML = '';
+            
+            productoImagenes.forEach((img, index) => {
+                preview.innerHTML += `
+                    <div class="preview-image">
+                        <img src="${img}" alt="Imagen ${index + 1}">
+                        <button class="remove-btn" onclick="eliminarImagenProducto(${index})">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                `;
+            });
+        }
+
+        function eliminarImagenProducto(index) {
+            productoImagenes.splice(index, 1);
+            actualizarImagenesPreview();
+        }
+
         function guardarProducto() {
+            const codigo = document.getElementById('productoCodigo').value;
             const nombre = document.getElementById('productoNombre').value;
             const categoria = document.getElementById('productoCategoria').value;
             const descripcion = document.getElementById('productoDescripcion').value;
             const precio = parseFloat(document.getElementById('productoPrecio').value);
             const stock = parseInt(document.getElementById('productoStock').value);
+            const estado = document.getElementById('productoEstado').checked;
             
-            if (!nombre || !categoria || !precio) {
-                alert('Por favor completa los campos obligatorios (Nombre, Categoría y Precio)');
+            if (!codigo || !nombre || !categoria || !precio) {
+                alert('Por favor completa los campos obligatorios');
                 return;
             }
             
             if (productoEditando) {
-                // Editar producto existente
                 const index = sistema.productos.findIndex(p => p.id === productoEditando);
                 sistema.productos[index] = {
                     ...sistema.productos[index],
+                    codigo,
                     nombre,
                     categoria,
                     descripcion,
                     precio,
                     stock,
-                    estado: sistema.productos[index].estado
+                    estado,
+                    imagenes: productoImagenes
                 };
-                
-                agregarActividad('Producto actualizado', nombre);
+                agregarActividad('Producto actualizado', `${codigo} - ${nombre}`);
             } else {
-                // Nuevo producto
                 const nuevoId = sistema.productos.length > 0 ? 
                     Math.max(...sistema.productos.map(p => p.id)) + 1 : 1;
                 
                 sistema.productos.push({
                     id: nuevoId,
+                    codigo,
                     nombre,
                     categoria,
                     descripcion,
                     precio,
                     stock,
-                    estado: true,
-                    imagenes: []
+                    estado,
+                    imagenes: productoImagenes
                 });
-                
-                agregarActividad('Producto creado', nombre);
+                agregarActividad('Producto creado', `${codigo} - ${nombre}`);
             }
             
             guardarDatos();
@@ -1579,26 +1458,14 @@
             }
         }
 
-        function eliminarImagenProducto(productoId, imagenIndex) {
-            const producto = sistema.productos.find(p => p.id === productoId);
-            if (producto && producto.imagenes) {
-                producto.imagenes.splice(imagenIndex, 1);
-                guardarDatos();
-                mostrarModalProducto(productoId);
-                agregarActividad('Imagen eliminada', `Producto ID: ${productoId}`);
-            }
-        }
-
         // Galería
-        let imagenesParaSubir = [];
-
         function previewImages(event) {
             const files = event.target.files;
-            imagenesParaSubir = Array.from(files);
+            fotosParaSubir = Array.from(files);
             const preview = document.getElementById('imagePreview');
             preview.innerHTML = '';
             
-            imagenesParaSubir.forEach((file, index) => {
+            fotosParaSubir.forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     preview.innerHTML += `
@@ -1613,18 +1480,19 @@
                 reader.readAsDataURL(file);
             });
             
-            document.getElementById('btnSubirFotos').disabled = imagenesParaSubir.length === 0;
+            document.getElementById('btnSubirFotos').disabled = fotosParaSubir.length === 0;
         }
 
         function eliminarPreview(index) {
-            imagenesParaSubir.splice(index, 1);
-            previewImages({ target: { files: imagenesParaSubir } });
+            fotosParaSubir.splice(index, 1);
+            previewImages({ target: { files: fotosParaSubir } });
         }
 
         function subirFotos() {
             const categoria = document.getElementById('categoriaFoto').value;
+            const nombre = document.getElementById('nombreFoto').value || 'Sin nombre';
             
-            imagenesParaSubir.forEach((file, index) => {
+            fotosParaSubir.forEach((file, index) => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const nuevoId = sistema.fotos.length > 0 ? 
@@ -1634,20 +1502,22 @@
                         id: nuevoId,
                         url: e.target.result,
                         categoria,
-                        fecha: new Date().toISOString(),
-                        destacada: false
+                        nombre,
+                        destacada: false,
+                        fecha: new Date().toISOString()
                     });
                     
-                    if (index === imagenesParaSubir.length - 1) {
+                    if (index === fotosParaSubir.length - 1) {
                         guardarDatos();
                         cargarGaleria();
-                        imagenesParaSubir = [];
+                        fotosParaSubir = [];
                         document.getElementById('imagePreview').innerHTML = '';
                         document.getElementById('btnSubirFotos').disabled = true;
                         document.getElementById('fileInput').value = '';
+                        document.getElementById('nombreFoto').value = '';
                         
-                        agregarActividad('Fotos subidas', `${imagenesParaSubir.length} fotos a ${categoria}`);
-                        alert(`${imagenesParaSubir.length} fotos subidas correctamente`);
+                        agregarActividad('Fotos subidas', `${fotosParaSubir.length} fotos a ${categoria}`);
+                        alert(`${fotosParaSubir.length} fotos subidas correctamente`);
                     }
                 };
                 reader.readAsDataURL(file);
@@ -1666,10 +1536,10 @@
                 col.className = 'col-md-3 mb-4';
                 col.innerHTML = `
                     <div class="preview-image">
-                        <img src="${foto.url}" alt="Foto ${foto.id}" style="height: 200px;">
-                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; display: flex; justify-content: space-between; align-items: center;">
-                            <span>${foto.categoria}</span>
-                            <div>
+                        <img src="${foto.url}" alt="${foto.nombre}" style="height: 200px;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px;">
+                            <small>${foto.categoria} - ${foto.nombre}</small>
+                            <div style="display: flex; justify-content: space-between; margin-top: 5px;">
                                 <button class="btn btn-sm ${foto.destacada ? 'btn-warning' : 'btn-success'}" onclick="toggleDestacada(${foto.id})">
                                     <i class="fas fa-star"></i>
                                 </button>
@@ -1683,23 +1553,10 @@
                 galeria.appendChild(col);
                 
                 if (foto.destacada) {
-                    const colDest = document.createElement('div');
-                    colDest.className = 'col-md-3 mb-4';
-                    colDest.innerHTML = `
-                        <div class="preview-image">
-                            <img src="${foto.url}" alt="Foto destacada ${foto.id}" style="height: 200px;">
-                            <div style="position: absolute; top: 5px; right: 5px;">
-                                <button class="btn btn-sm btn-danger" onclick="toggleDestacada(${foto.id})">
-                                    <i class="fas fa-times"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
+                    const colDest = col.cloneNode(true);
                     destacadas.appendChild(colDest);
                 }
             });
-            
-            actualizarDashboard();
         }
 
         function toggleDestacada(id) {
@@ -1708,7 +1565,6 @@
                 foto.destacada = !foto.destacada;
                 guardarDatos();
                 cargarGaleria();
-                agregarActividad('Foto destacada cambiada', `Foto ID: ${id}`);
             }
         }
 
@@ -1717,7 +1573,6 @@
                 sistema.fotos = sistema.fotos.filter(f => f.id !== id);
                 guardarDatos();
                 cargarGaleria();
-                agregarActividad('Foto eliminada', `ID: ${id}`);
             }
         }
 
@@ -1766,8 +1621,6 @@
                     </div>
                 `;
             });
-            
-            actualizarDashboard();
         }
 
         function guardarTemporada() {
@@ -1798,7 +1651,6 @@
             guardarDatos();
             cargarTemporadas();
             
-            // Limpiar formulario
             document.getElementById('nombreTemporada').value = '';
             document.getElementById('inicioTemporada').value = '';
             document.getElementById('finTemporada').value = '';
@@ -1813,7 +1665,6 @@
                 document.getElementById('inicioTemporada').value = temporada.inicio;
                 document.getElementById('finTemporada').value = temporada.fin;
                 
-                // Marcar checkboxes correspondientes
                 document.querySelectorAll('.categoria-checkbox').forEach(cb => {
                     cb.checked = temporada.categorias.includes(cb.value);
                 });
@@ -1825,7 +1676,6 @@
                 sistema.temporadas = sistema.temporadas.filter(t => t.id !== id);
                 guardarDatos();
                 cargarTemporadas();
-                agregarActividad('Temporada eliminada', `ID: ${id}`);
             }
         }
 
@@ -1843,8 +1693,6 @@
                     aplicarTexto = 'Todos los productos';
                 } else if (regla.aplicar === 'categoria') {
                     aplicarTexto = `Categoría: ${regla.categoria}`;
-                } else if (regla.aplicar === 'producto') {
-                    aplicarTexto = 'Productos específicos';
                 }
                 
                 tbody.innerHTML += `
@@ -1876,13 +1724,11 @@
             const modal = document.getElementById('modalPrecio');
             const selectCategoria = document.getElementById('reglaCategoria');
             
-            // Cargar categorías
             selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
             sistema.categorias.forEach(categoria => {
                 selectCategoria.innerHTML += `<option value="${categoria.nombre}">${categoria.nombre}</option>`;
             });
             
-            // Mostrar/ocultar campo de categoría según selección
             document.getElementById('reglaAplicar').addEventListener('change', function() {
                 document.getElementById('reglaCategoriaContainer').style.display = 
                     this.value === 'categoria' ? 'block' : 'none';
@@ -1901,7 +1747,7 @@
             const fin = document.getElementById('reglaFin').value;
             
             if (!nombre || !valor || !inicio || !fin) {
-                alert('Por favor completa todos los campos obligatorios');
+                alert('Por favor completa todos los campos');
                 return;
             }
             
@@ -1922,14 +1768,13 @@
             
             guardarDatos();
             cargarReglasPrecio();
-            cargarProductos(); // Para actualizar precios
+            cargarProductos();
             cerrarModal('modalPrecio');
             
             agregarActividad('Regla de precio creada', nombre);
         }
 
         function editarReglaPrecio(id) {
-            // Implementar edición similar a otras funciones
             alert('Edición de regla de precio - Funcionalidad en desarrollo');
         }
 
@@ -1939,41 +1784,40 @@
                 guardarDatos();
                 cargarReglasPrecio();
                 cargarProductos();
-                agregarActividad('Regla de precio eliminada', `ID: ${id}`);
             }
         }
 
         // Configuración
         function cargarConfiguracion() {
-            document.getElementById('nombreNegocio').value = sistema.configuracion.nombreNegocio || '';
-            document.getElementById('whatsappNumber').value = sistema.configuracion.whatsapp || '';
-            document.getElementById('horario').value = sistema.configuracion.horario || '';
-            document.getElementById('direccion').value = sistema.configuracion.direccion || '';
+            const config = sistema.configuracion;
             
-            // Color picker
-            const colorPrincipal = sistema.configuracion.colorPrincipal || '#2e7d32';
-            document.querySelectorAll('.color-option').forEach(option => {
-                option.classList.remove('selected');
-                if (option.getAttribute('data-color') === colorPrincipal) {
-                    option.classList.add('selected');
-                }
-            });
+            document.getElementById('nombreNegocio').value = config.nombreNegocio || '';
+            document.getElementById('whatsappNumber').value = config.whatsapp || '';
+            document.getElementById('horario').value = config.horario || '';
+            document.getElementById('direccion').value = config.direccion || '';
+            document.getElementById('telefonoFijo').value = config.telefono || '';
+            document.getElementById('emailContacto').value = config.email || '';
+            document.getElementById('facebook').value = config.facebook || '';
+            document.getElementById('instagram').value = config.instagram || '';
+            document.getElementById('tiktok').value = config.tiktok || '';
         }
 
         function guardarConfiguracion() {
-            const colorSeleccionado = document.querySelector('.color-option.selected').getAttribute('data-color');
-            
             sistema.configuracion = {
                 nombreNegocio: document.getElementById('nombreNegocio').value,
                 whatsapp: document.getElementById('whatsappNumber').value,
                 horario: document.getElementById('horario').value,
                 direccion: document.getElementById('direccion').value,
-                colorPrincipal: colorSeleccionado
+                telefono: document.getElementById('telefonoFijo').value,
+                email: document.getElementById('emailContacto').value,
+                facebook: document.getElementById('facebook').value,
+                instagram: document.getElementById('instagram').value,
+                tiktok: document.getElementById('tiktok').value
             };
             
             guardarDatos();
-            agregarActividad('Configuración actualizada', 'Parámetros generales');
             alert('Configuración guardada correctamente');
+            agregarActividad('Configuración actualizada', 'Parámetros generales');
         }
 
         function exportarDatos() {
@@ -2020,32 +1864,12 @@
             document.getElementById(modalId).style.display = 'none';
             categoriaEditando = null;
             productoEditando = null;
+            productoImagenes = [];
         }
-
-        // Color picker
-        document.querySelectorAll('.color-option').forEach(option => {
-            option.addEventListener('click', function() {
-                document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
-                this.classList.add('selected');
-            });
-        });
-
-        // Switch de estado
-        document.getElementById('categoriaEstado').addEventListener('change', function() {
-            document.getElementById('estadoTexto').textContent = this.checked ? 'Activa' : 'Inactiva';
-        });
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             cargarDatos();
-            
-            // Configurar fecha mínima para inputs de fecha
-            const hoy = new Date().toISOString().split('T')[0];
-            document.querySelectorAll('input[type="date"]').forEach(input => {
-                if (!input.id.includes('inicio')) { // No aplicar a fechas de inicio
-                    input.min = hoy;
-                }
-            });
         });
 
         // Cerrar modal haciendo clic fuera
@@ -2054,6 +1878,7 @@
                 event.target.style.display = 'none';
                 categoriaEditando = null;
                 productoEditando = null;
+                productoImagenes = [];
             }
         });
     </script>
