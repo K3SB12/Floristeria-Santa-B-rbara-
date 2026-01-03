@@ -64,4 +64,179 @@
       "id": 6,
       "codigo": "SB-TEM-NAV",
       "nombre": "Ramo Navideño Especial",
-      "categoria": "temporada
+      "categoria": "temporada",
+      "precio": 48000,
+      "precioEspecial": 43200,
+      "descripcion": "Especial para Navidad con flores rojas, verdes y decoraciones doradas.",
+      "estado": true,
+      "imagenes": ["https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+      "stock": 7
+    },
+    {
+      "id": 7,
+      "codigo": "SB-ROS-012-R",
+      "nombre": "Ramo de 12 Rosas Rojas",
+      "categoria": "rosas",
+      "precio": 75000,
+      "precioEspecial": 67500,
+      "descripcion": "Impresionante ramo de 12 rosas rojas para ocasiones muy especiales.",
+      "estado": true,
+      "imagenes": ["https://images.unsplash.com/photo-1519238263530-99c7dadcf5d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+      "stock": 6
+    },
+    {
+      "id": 8,
+      "codigo": "SB-ROS-006-B",
+      "nombre": "Ramo de 6 Rosas Blancas",
+      "categoria": "rosas",
+      "precio": 48000,
+      "precioEspecial": null,
+      "descripcion": "Elegante ramo de 6 rosas blancas, simbolo de pureza y elegancia.",
+      "estado": true,
+      "imagenes": ["https://images.unsplash.com/photo-1562696745-b5f38400c1af?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+      "stock": 9
+    }
+  ],
+  "categorias": [
+    {
+      "id": 1,
+      "nombre": "Rosas",
+      "descripcion": "Rosas de todos los colores y tamaños",
+      "estado": true,
+      "temporada": ""
+    },
+    {
+      "id": 2,
+      "nombre": "Arreglos",
+      "descripcion": "Arreglos florales personalizados",
+      "estado": true,
+      "temporada": ""
+    },
+    {
+      "id": 3,
+      "nombre": "Plantas",
+      "descripcion": "Plantas de interior y exterior",
+      "estado": true,
+      "temporada": ""
+    },
+    {
+      "id": 4,
+      "nombre": "Temporada",
+      "descripcion": "Productos especiales de temporada",
+      "estado": true,
+      "temporada": "navidad"
+    }
+  ],
+  "fotos": [
+    {
+      "id": 1,
+      "url": "https://images.unsplash.com/photo-1447875569765-2b3db822bec9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "categoria": "local",
+      "destacada": true,
+      "nombre": "Nuestro local",
+      "fecha": "2024-01-15"
+    },
+    {
+      "id": 2,
+      "url": "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "categoria": "productos",
+      "destacada": true,
+      "nombre": "Arreglo de novia",
+      "fecha": "2024-01-14"
+    },
+    {
+      "id": 3,
+      "url": "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "categoria": "eventos",
+      "destacada": true,
+      "nombre": "Decoración evento",
+      "fecha": "2024-01-13"
+    },
+    {
+      "id": 4,
+      "url": "https://images.unsplash.com/photo-1563630485130-c5181d691c93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "categoria": "trabajos",
+      "destacada": true,
+      "nombre": "Centro de mesa",
+      "fecha": "2024-01-12"
+    },
+    {
+      "id": 5,
+      "url": "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+      "categoria": "productos",
+      "destacada": false,
+      "nombre": "Rosas mixtas",
+      "fecha": "2024-01-11"
+    }
+  ],
+  "temporadas": [
+    {
+      "id": 1,
+      "nombre": "Navidad 2024",
+      "inicio": "2024-12-01",
+      "fin": "2024-12-31",
+      "categorias": ["Temporada"],
+      "estado": true
+    },
+    {
+      "id": 2,
+      "nombre": "San Valentín 2024",
+      "inicio": "2024-02-01",
+      "fin": "2024-02-14",
+      "categorias": ["Rosas", "Arreglos"],
+      "estado": false
+    }
+  ],
+  "reglasPrecio": [
+    {
+      "id": 1,
+      "nombre": "Descuento Navidad",
+      "tipo": "descuento",
+      "valor": 15,
+      "aplicar": "categoria",
+      "categoria": "Temporada",
+      "inicio": "2024-12-01",
+      "fin": "2024-12-31",
+      "estado": true
+    },
+    {
+      "id": 2,
+      "nombre": "Oferta Rosas",
+      "tipo": "descuento",
+      "valor": 10,
+      "aplicar": "categoria",
+      "categoria": "Rosas",
+      "inicio": "2024-01-01",
+      "fin": "2024-12-31",
+      "estado": true
+    }
+  ],
+  "configuracion": {
+    "nombreNegocio": "Floristería Santa Bárbara",
+    "whatsapp": "573001234567",
+    "horario": "Lunes a Sábado 8am - 7pm",
+    "direccion": "Av. Principal #123, Ciudad",
+    "email": "info@floristeriasantabarbara.com",
+    "telefono": "(123) 456-7890",
+    "colorPrincipal": "#2e7d32",
+    "instagram": "@floristeriasantabarbara",
+    "facebook": "https://facebook.com/floristeriasantabarbara"
+  },
+  "actividad": [
+    {
+      "accion": "Producto creado",
+      "detalle": "Ramo de 6 Rosas Rojas Premium (SB-ROS-006-R)",
+      "fecha": "2024-01-15T10:30:00.000Z"
+    },
+    {
+      "accion": "Producto creado",
+      "detalle": "Arreglo Tropical (SB-ARR-TROP)",
+      "fecha": "2024-01-15T10:35:00.000Z"
+    },
+    {
+      "accion": "Foto subida",
+      "detalle": "Nuestro local",
+      "fecha": "2024-01-15T11:00:00.000Z"
+    }
+  ]
+}
