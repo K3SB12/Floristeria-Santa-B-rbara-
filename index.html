@@ -5,7 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Floristería Santa Bárbara | Flores Frescas y Arreglos Florales</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/3024/3024055.png" type="image/x-icon">
+    
+    <!-- Meta tags para SEO -->
     <meta name="description" content="Floristería Santa Bárbara - Flores frescas, arreglos florales y entrega a domicilio. Celebra tus momentos especiales con nosotros.">
+    <meta name="keywords" content="floristería, flores, arreglos florales, rosas, entrega de flores, Santa Bárbara, flores frescas">
+    <meta name="author" content="Floristería Santa Bárbara">
+    
+    <!-- Open Graph para redes sociales -->
+    <meta property="og:title" content="Floristería Santa Bárbara">
+    <meta property="og:description" content="Flores frescas y arreglos florales con entrega a domicilio">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1464207687429-7505649dae38">
+    <meta property="og:url" content="https://k3sb12.github.io/Floristeria-Santa-B-rbara-/">
+    
     <style>
         * {
             margin: 0;
@@ -60,6 +72,7 @@
             display: flex;
             align-items: center;
             gap: 15px;
+            text-decoration: none;
         }
         
         .logo-icon {
@@ -246,6 +259,49 @@
             margin: 15px 0;
         }
         
+        .product-old-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 1rem;
+            margin-right: 10px;
+        }
+        
+        .product-discount {
+            background-color: #ffeb3b;
+            color: #333;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        /* Categorías */
+        .categories {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .category-btn {
+            padding: 10px 20px;
+            background-color: var(--white);
+            border: 2px solid var(--primary-green);
+            border-radius: 30px;
+            color: var(--primary-green);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .category-btn:hover,
+        .category-btn.active {
+            background-color: var(--primary-green);
+            color: var(--white);
+        }
+        
         /* Formulario de pedido */
         .order-container {
             display: flex;
@@ -282,6 +338,11 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--primary-green);
+        }
+        
+        .required::after {
+            content: " *";
+            color: var(--accent-pink);
         }
         
         .form-control {
@@ -345,6 +406,80 @@
             color: #25D366;
             margin-right: 10px;
             font-size: 1.2rem;
+        }
+        
+        /* Alertas */
+        .alert {
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        /* Galería */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .gallery-item {
+            position: relative;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            height: 250px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
         }
         
         /* Footer */
@@ -445,24 +580,68 @@
             color: #e0e0e0;
         }
         
-        /* Alertas */
-        .alert {
-            padding: 12px 20px;
-            border-radius: var(--border-radius);
-            margin-bottom: 20px;
+        /* Botón WhatsApp flotante */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .whatsapp-float:hover {
+            background-color: #1da851;
+            transform: scale(1.1);
+        }
+        
+        .whatsapp-tooltip {
+            position: absolute;
+            right: 70px;
+            background: #333;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .whatsapp-float:hover .whatsapp-tooltip {
+            opacity: 1;
+        }
+        
+        /* Loading */
+        .loading {
             display: none;
+            text-align: center;
+            padding: 20px;
         }
         
-        .alert-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-green);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
         }
         
-        .alert-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         
         /* Responsive */
@@ -517,6 +696,10 @@
             .order-container {
                 padding: 25px;
             }
+            
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
         }
         
         @media (max-width: 576px) {
@@ -531,20 +714,50 @@
             .section-title {
                 font-size: 1.8rem;
             }
+            
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Animaciones */
+        .fade-in {
+            animation: fadeIn 1s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Botón WhatsApp flotante -->
+    <a href="https://wa.me/573001234567" target="_blank" class="whatsapp-float">
+        <i class="fab fa-whatsapp"></i>
+        <span class="whatsapp-tooltip">¡Haz tu pedido por WhatsApp!</span>
+    </a>
+
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <div class="logo">
+            <a href="#inicio" class="logo">
                 <i class="fas fa-seedling logo-icon"></i>
                 <div class="logo-text">
                     <h1>Floristería Santa Bárbara</h1>
                     <span>Flores frescas para cada ocasión</span>
                 </div>
-            </div>
+            </a>
             
             <button class="mobile-menu-btn" id="mobileMenuBtn">
                 <i class="fas fa-bars"></i>
@@ -554,6 +767,7 @@
                 <ul id="navMenu">
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#productos">Productos</a></li>
+                    <li><a href="#galeria">Galería</a></li>
                     <li><a href="#nosotros">Nosotros</a></li>
                     <li><a href="#pedidos">Pedidos</a></li>
                     <li><a href="#contacto">Contacto</a></li>
@@ -575,76 +789,72 @@
     <section id="productos" class="container">
         <h2 class="section-title">Nuestros Arreglos Florales</h2>
         
-        <div class="products-grid">
-            <!-- Producto 1 -->
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1563178406-4cdc2923acbc?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Ramo de Rosas Rojas" class="product-img">
-                <div class="product-info">
-                    <h3>Ramo de Rosas Rojas</h3>
-                    <p>Clásico y elegante ramo de 12 rosas rojas, perfecto para expresar amor y pasión.</p>
-                    <div class="product-price">$45.000</div>
-                    <button class="btn select-product" data-name="Ramo de Rosas Rojas" data-price="45000">Seleccionar</button>
-                </div>
+        <div class="categories" id="categoriesFilter">
+            <button class="category-btn active" data-category="todos">Todos</button>
+            <button class="category-btn" data-category="rosas">Rosas</button>
+            <button class="category-btn" data-category="arreglos">Arreglos</button>
+            <button class="category-btn" data-category="plantas">Plantas</button>
+            <button class="category-btn" data-category="temporada">Temporada</button>
+        </div>
+        
+        <div class="products-grid" id="productsGrid">
+            <!-- Los productos se cargarán dinámicamente con JavaScript -->
+        </div>
+        
+        <div class="loading" id="productsLoading">
+            <div class="spinner"></div>
+            <p>Cargando productos...</p>
+        </div>
+    </section>
+
+    <!-- Galería -->
+    <section id="galeria" style="background-color: var(--pale-green);">
+        <div class="container">
+            <h2 class="section-title">Nuestra Galería</h2>
+            <p style="text-align: center; margin-bottom: 30px; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Mira algunos de nuestros trabajos más recientes y hermosos arreglos florales creados con amor y dedicación.
+            </p>
+            
+            <div class="gallery" id="galleryGrid">
+                <!-- Las imágenes de la galería se cargarán dinámicamente -->
             </div>
             
-            <!-- Producto 2 -->
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Arreglo Tropical" class="product-img">
-                <div class="product-info">
-                    <h3>Arreglo Tropical</h3>
-                    <p>Colorido arreglo con flores exóticas que transmiten energía y alegría.</p>
-                    <div class="product-price">$55.000</div>
-                    <button class="btn select-product" data-name="Arreglo Tropical" data-price="55000">Seleccionar</button>
-                </div>
-            </div>
-            
-            <!-- Producto 3 -->
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Centro de Mesa Elegante" class="product-img">
-                <div class="product-info">
-                    <h3>Centro de Mesa Elegante</h3>
-                    <p>Exquisito centro de mesa con flores de temporada para eventos especiales.</p>
-                    <div class="product-price">$65.000</div>
-                    <button class="btn select-product" data-name="Centro de Mesa Elegante" data-price="65000">Seleccionar</button>
-                </div>
-            </div>
-            
-            <!-- Producto 4 -->
-            <div class="product-card">
-                <img src="https://images.unsplash.com/photo-1557090495-fc9312e77b56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80" alt="Cesta de Girasoles" class="product-img">
-                <div class="product-info">
-                    <h3>Cesta de Girasoles</h3>
-                    <p>Radiante cesta con girasoles frescos que iluminarán cualquier espacio.</p>
-                    <div class="product-price">$40.000</div>
-                    <button class="btn select-product" data-name="Cesta de Girasoles" data-price="40000">Seleccionar</button>
-                </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="btn" onclick="cargarMasFotos()" id="loadMoreBtn">
+                    <i class="fas fa-plus"></i> Ver Más Fotos
+                </button>
             </div>
         </div>
     </section>
 
     <!-- Sobre Nosotros -->
-    <section id="nosotros" style="background-color: var(--pale-green);">
-        <div class="container">
-            <h2 class="section-title">Sobre Floristería Santa Bárbara</h2>
-            <div style="max-width: 800px; margin: 0 auto;">
-                <p style="font-size: 1.2rem; margin-bottom: 30px; text-align: center;">
-                    Con más de 10 años de experiencia, en Floristería Santa Bárbara nos especializamos en crear arreglos florales únicos que capturan la esencia de cada ocasión especial. Nuestro compromiso es ofrecer flores frescas de la más alta calidad con un servicio personalizado.
-                </p>
-                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 30px; margin-top: 40px;">
-                    <div style="text-align: center; flex: 1; min-width: 200px;">
-                        <i class="fas fa-leaf" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 15px;"></i>
-                        <h3 style="color: var(--primary-green); margin-bottom: 10px;">Flores Frescas</h3>
-                        <p>Trabajamos con proveedores locales para garantizar frescura y calidad.</p>
-                    </div>
-                    <div style="text-align: center; flex: 1; min-width: 200px;">
-                        <i class="fas fa-shipping-fast" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 15px;"></i>
-                        <h3 style="color: var(--primary-green); margin-bottom: 10px;">Entrega Rápida</h3>
-                        <p>Envío el mismo día para pedidos realizados antes de las 2pm.</p>
-                    </div>
-                    <div style="text-align: center; flex: 1; min-width: 200px;">
-                        <i class="fas fa-heart" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 15px;"></i>
-                        <h3 style="color: var(--primary-green); margin-bottom: 10px;">Hecho con Amor</h3>
-                        <p>Cada arreglo es creado cuidadosamente por nuestros floristas expertos.</p>
+    <section id="nosotros" class="container">
+        <h2 class="section-title">Sobre Floristería Santa Bárbara</h2>
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center;">
+                <div style="flex: 1; min-width: 300px;">
+                    <img src="https://images.unsplash.com/photo-1447875569765-2b3db822bec9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                         alt="Nuestra floristería" 
+                         style="width: 100%; border-radius: var(--border-radius); box-shadow: var(--shadow);">
+                </div>
+                <div style="flex: 1; min-width: 300px;">
+                    <p style="font-size: 1.2rem; margin-bottom: 20px;">
+                        Con más de 10 años de experiencia, en <strong>Floristería Santa Bárbara</strong> nos especializamos en crear arreglos florales únicos que capturan la esencia de cada ocasión especial.
+                    </p>
+                    <p style="margin-bottom: 20px;">
+                        Nuestro compromiso es ofrecer flores frescas de la más alta calidad con un servicio personalizado que supere las expectativas de nuestros clientes.
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 30px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <i class="fas fa-leaf" style="font-size: 2rem; color: var(--primary-green); margin-bottom: 10px; display: block;"></i>
+                            <h3 style="color: var(--primary-green); margin-bottom: 5px;">Flores Frescas</h3>
+                            <p>Trabajamos con proveedores locales para garantizar frescura y calidad.</p>
+                        </div>
+                        <div style="flex: 1; min-width: 200px;">
+                            <i class="fas fa-shipping-fast" style="font-size: 2rem; color: var(--primary-green); margin-bottom: 10px; display: block;"></i>
+                            <h3 style="color: var(--primary-green); margin-bottom: 5px;">Entrega Rápida</h3>
+                            <p>Envío el mismo día para pedidos realizados antes de las 2pm.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -660,32 +870,37 @@
         
         <div id="alertContainer"></div>
         
-        <div class="order-container">
+        <div class="order-container fade-in">
             <div class="form-container">
                 <form id="orderForm">
                     <div class="form-group">
-                        <label for="product">Producto Seleccionado *</label>
+                        <label for="product" class="required">Producto Seleccionado</label>
                         <input type="text" id="product" class="form-control" placeholder="Selecciona un producto de la lista arriba" readonly required>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Nombre Completo *</label>
+                            <label for="name" class="required">Nombre Completo</label>
                             <input type="text" id="name" class="form-control" placeholder="Tu nombre completo" required>
                         </div>
                         <div class="form-group">
-                            <label for="phone">Teléfono *</label>
+                            <label for="phone" class="required">Teléfono</label>
                             <input type="tel" id="phone" class="form-control" placeholder="Ej: 3001234567" required>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label for="date">Fecha de Entrega/Recogida *</label>
+                        <label for="email">Correo Electrónico</label>
+                        <input type="email" id="email" class="form-control" placeholder="tu@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="date" class="required">Fecha de Entrega/Recogida</label>
                         <input type="date" id="date" class="form-control" required>
                     </div>
                     
                     <div class="form-group">
-                        <label>Método de Entrega *</label>
+                        <label class="required">Método de Entrega</label>
                         <div style="display: flex; gap: 20px; margin-top: 10px;">
                             <label style="display: flex; align-items: center; gap: 8px;">
                                 <input type="radio" name="delivery" value="envio" checked> Envío a Domicilio
@@ -697,7 +912,7 @@
                     </div>
                     
                     <div class="form-group" id="addressGroup">
-                        <label for="address">Dirección de Envío *</label>
+                        <label for="address" class="required">Dirección de Envío</label>
                         <input type="text" id="address" class="form-control" placeholder="Dirección completa para la entrega" required>
                     </div>
                     
@@ -728,6 +943,7 @@
                     • Producto: [Selecciona un producto]
                     • Nombre: [Tu nombre aparecerá aquí]
                     • Teléfono: [Tu teléfono]
+                    • Email: [Tu email]
                     • Fecha de entrega: [Fecha seleccionada]
                     • Método: [Envío/Recogida]
 
@@ -745,7 +961,7 @@
                 
                 <div class="whatsapp-instructions">
                     <p><i class="fab fa-whatsapp"></i> <strong>Instrucciones:</strong></p>
-                    <p>1. Completa todos los campos del formulario</p>
+                    <p>1. Completa todos los campos obligatorios (*)</p>
                     <p>2. Revisa la vista previa del mensaje</p>
                     <p>3. Haz clic en "Generar Pedido por WhatsApp"</p>
                     <p>4. Se abrirá WhatsApp con el mensaje completo listo para enviar</p>
@@ -765,7 +981,7 @@
                         <a href="https://www.facebook.com/share/1Csic9bMV2/?mibextid=wwXIfr" target="_blank" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
-                        <a href="#pedidos" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#pedidos" aria-label="Pedidos"><i class="fas fa-shopping-cart"></i></a>
                     </div>
                 </div>
                 
@@ -784,21 +1000,138 @@
                     <ul>
                         <li><a href="#inicio"><i class="fas fa-home"></i> Inicio</a></li>
                         <li><a href="#productos"><i class="fas fa-shopping-bag"></i> Productos</a></li>
+                        <li><a href="#galeria"><i class="fas fa-images"></i> Galería</a></li>
                         <li><a href="#nosotros"><i class="fas fa-info-circle"></i> Sobre Nosotros</a></li>
                         <li><a href="#pedidos"><i class="fas fa-shopping-cart"></i> Hacer Pedido</a></li>
-                        <li><a href="#contacto"><i class="fas fa-address-book"></i> Contacto</a></li>
                     </ul>
                 </div>
             </div>
             
             <div class="copyright">
-                <p>&copy; 2023 Floristería Santa Bárbara. Todos los derechos reservados.</p>
-                <p style="margin-top: 5px;">Diseño web original inspirado en las mejores floristerías</p>
+                <p>&copy; <span id="currentYear"></span> Floristería Santa Bárbara. Todos los derechos reservados.</p>
+                <p style="margin-top: 5px; font-size: 0.8rem;">
+                    <a href="admin.html" style="color: #e0e0e0; text-decoration: none;">
+                        <i class="fas fa-lock"></i> Acceso Administrativo
+                    </a>
+                </p>
             </div>
         </div>
     </footer>
 
     <script>
+        // Datos de la floristería (se cargan desde localStorage o datos por defecto)
+        let floristeriaData = {
+            productos: [],
+            fotos: [],
+            configuracion: {
+                whatsapp: "573001234567",
+                nombreNegocio: "Floristería Santa Bárbara",
+                horario: "Lunes a Sábado 8am - 7pm",
+                direccion: "Av. Principal #123, Ciudad"
+            }
+        };
+
+        // Cargar datos del localStorage
+        function cargarDatos() {
+            const datosGuardados = localStorage.getItem('floristeria_sistema');
+            if (datosGuardados) {
+                const datos = JSON.parse(datosGuardados);
+                floristeriaData.productos = datos.productos || [];
+                floristeriaData.fotos = datos.fotos || [];
+                floristeriaData.configuracion = datos.configuracion || floristeriaData.configuracion;
+            } else {
+                // Datos por defecto
+                floristeriaData.productos = [
+                    { 
+                        id: 1, 
+                        nombre: "Ramo de Rosas Rojas", 
+                        categoria: "rosas", 
+                        precio: 45000, 
+                        precioEspecial: 40500,
+                        descripcion: "Clásico y elegante ramo de 12 rosas rojas, perfecto para expresar amor y pasión.", 
+                        estado: true, 
+                        imagenes: ["https://images.unsplash.com/photo-1563178406-4cdc2923acbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                        stock: 15 
+                    },
+                    { 
+                        id: 2, 
+                        nombre: "Arreglo Tropical", 
+                        categoria: "arreglos", 
+                        precio: 55000, 
+                        precioEspecial: null,
+                        descripcion: "Colorido arreglo con flores exóticas que transmiten energía y alegría.", 
+                        estado: true, 
+                        imagenes: ["https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                        stock: 8 
+                    },
+                    { 
+                        id: 3, 
+                        nombre: "Centro de Mesa Elegante", 
+                        categoria: "arreglos", 
+                        precio: 65000, 
+                        precioEspecial: 55250,
+                        descripcion: "Exquisito centro de mesa con flores de temporada para eventos especiales.", 
+                        estado: true, 
+                        imagenes: ["https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                        stock: 5 
+                    },
+                    { 
+                        id: 4, 
+                        nombre: "Cesta de Girasoles", 
+                        categoria: "arreglos", 
+                        precio: 40000, 
+                        precioEspecial: null,
+                        descripcion: "Radiante cesta con girasoles frescos que iluminarán cualquier espacio.", 
+                        estado: true, 
+                        imagenes: ["https://images.unsplash.com/photo-1557090495-fc9312e77b56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                        stock: 10 
+                    },
+                    { 
+                        id: 5, 
+                        nombre: "Orquídea Elegante", 
+                        categoria: "plantas", 
+                        precio: 35000, 
+                        precioEspecial: 31500,
+                        descripcion: "Hermosa orquídea en maceta, perfecta para decoración de interiores.", 
+                        estado: true, 
+                        imagenes: ["https://images.unsplash.com/photo-1485955900006-10f4d324d411?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                        stock: 12 
+                    },
+                    { 
+                        id: 6, 
+                        nombre: "Ramo Navideño", 
+                        categoria: "temporada", 
+                        precio: 48000, 
+                        precioEspecial: 43200,
+                        descripcion: "Especial para Navidad con flores rojas y verdes decorativas.", 
+                        estado: true, 
+                        imagenes: ["https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                        stock: 7 
+                    }
+                ];
+
+                floristeriaData.fotos = [
+                    { id: 1, url: "https://images.unsplash.com/photo-1447875569765-2b3db822bec9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "local", destacada: true },
+                    { id: 2, url: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "productos", destacada: true },
+                    { id: 3, url: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "eventos", destacada: true },
+                    { id: 4, url: "https://images.unsplash.com/photo-1563630485130-c5181d691c93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "trabajos", destacada: true },
+                    { id: 5, url: "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "productos", destacada: false },
+                    { id: 6, url: "https://images.unsplash.com/photo-1459156212016-c812468e2115?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "eventos", destacada: false }
+                ];
+            }
+
+            // Actualizar datos en la página
+            actualizarDatosPagina();
+        }
+
+        // Función para actualizar los datos en la página
+        function actualizarDatosPagina() {
+            cargarProductos();
+            cargarGaleria();
+            actualizarWhatsAppButton();
+            actualizarInformacionContacto();
+        }
+
         // Menú móvil
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
@@ -818,7 +1151,7 @@
                 document.getElementById('mobileMenuBtn').querySelector('i').classList.replace('fa-times', 'fa-bars');
             });
         });
-        
+
         // Mostrar alerta
         function showAlert(message, type) {
             const alertContainer = document.getElementById('alertContainer');
@@ -835,21 +1168,105 @@
                 alertDiv.style.display = 'none';
             }, 5000);
         }
-        
-        // Manejo de selección de productos
-        document.querySelectorAll('.select-product').forEach(button => {
-            button.addEventListener('click', function() {
-                const productName = this.getAttribute('data-name');
-                const productPrice = this.getAttribute('data-price');
-                const formattedPrice = new Intl.NumberFormat('es-CO').format(productPrice);
-                document.getElementById('product').value = `${productName} - $${formattedPrice}`;
-                updateWhatsAppPreview();
+
+        // Cargar productos
+        function cargarProductos() {
+            const productsGrid = document.getElementById('productsGrid');
+            const loading = document.getElementById('productsLoading');
+            
+            // Mostrar loading
+            loading.style.display = 'block';
+            productsGrid.innerHTML = '';
+            
+            // Simular carga
+            setTimeout(() => {
+                const productosActivos = floristeriaData.productos.filter(p => p.estado);
                 
-                // Desplazar suavemente al formulario
-                document.getElementById('pedidos').scrollIntoView({ behavior: 'smooth' });
+                if (productosActivos.length === 0) {
+                    productsGrid.innerHTML = `
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                            <i class="fas fa-seedling" style="font-size: 3rem; color: #ccc; margin-bottom: 20px;"></i>
+                            <h3>No hay productos disponibles</h3>
+                            <p>Próximamente agregaremos más arreglos florales.</p>
+                        </div>
+                    `;
+                } else {
+                    productosActivos.forEach(producto => {
+                        const precioMostrar = producto.precioEspecial || producto.precio;
+                        const descuento = producto.precioEspecial ? 
+                            Math.round((1 - producto.precioEspecial / producto.precio) * 100) : 0;
+                        
+                        productsGrid.innerHTML += `
+                            <div class="product-card" data-category="${producto.categoria}">
+                                <img src="${producto.imagenes[0] || 'https://images.unsplash.com/photo-1557090495-fc9312e77b56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" 
+                                     alt="${producto.nombre}" 
+                                     class="product-img">
+                                <div class="product-info">
+                                    <h3>${producto.nombre}</h3>
+                                    <p>${producto.descripcion}</p>
+                                    <div class="product-price">
+                                        ${producto.precioEspecial ? 
+                                            `<span class="product-old-price">$${producto.precio.toLocaleString()}</span>` : 
+                                            ''
+                                        }
+                                        $${precioMostrar.toLocaleString()}
+                                        ${descuento > 0 ? `<span class="product-discount">-${descuento}%</span>` : ''}
+                                    </div>
+                                    <button class="btn select-product" 
+                                            data-name="${producto.nombre}" 
+                                            data-price="${precioMostrar}"
+                                            onclick="seleccionarProducto('${producto.nombre}', ${precioMostrar})">
+                                        Seleccionar
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                loading.style.display = 'none';
+                initCategoryFilter();
+            }, 500);
+        }
+
+        // Filtro de categorías
+        function initCategoryFilter() {
+            const categoryBtns = document.querySelectorAll('.category-btn');
+            const productCards = document.querySelectorAll('.product-card');
+            
+            categoryBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remover activo de todos los botones
+                    categoryBtns.forEach(b => b.classList.remove('active'));
+                    // Agregar activo al botón clickeado
+                    this.classList.add('active');
+                    
+                    const category = this.getAttribute('data-category');
+                    
+                    // Filtrar productos
+                    productCards.forEach(card => {
+                        if (category === 'todos' || card.getAttribute('data-category') === category) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
             });
-        });
-        
+        }
+
+        // Seleccionar producto
+        function seleccionarProducto(nombre, precio) {
+            document.getElementById('product').value = `${nombre} - $${precio.toLocaleString()}`;
+            updateWhatsAppPreview();
+            
+            // Desplazar suavemente al formulario
+            document.getElementById('pedidos').scrollIntoView({ behavior: 'smooth' });
+            
+            // Mostrar notificación
+            showAlert(`<i class="fas fa-check-circle"></i> Producto "${nombre}" seleccionado`, 'success');
+        }
+
         // Mostrar/ocultar campo de dirección según método de entrega
         document.querySelectorAll('input[name="delivery"]').forEach(radio => {
             radio.addEventListener('change', function() {
@@ -865,7 +1282,7 @@
                 updateWhatsAppPreview();
             });
         });
-        
+
         // Formatear fecha en español
         function formatDate(dateString) {
             if (!dateString) return '[Fecha seleccionada]';
@@ -874,12 +1291,13 @@
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             return date.toLocaleDateString('es-ES', options);
         }
-        
+
         // Actualizar vista previa del mensaje de WhatsApp
         function updateWhatsAppPreview() {
             const product = document.getElementById('product').value || '[Selecciona un producto]';
             const name = document.getElementById('name').value || '[Tu nombre aparecerá aquí]';
             const phone = document.getElementById('phone').value || '[Tu teléfono]';
+            const email = document.getElementById('email').value || '[Tu email]';
             const date = formatDate(document.getElementById('date').value);
             const deliveryMethod = document.querySelector('input[name="delivery"]:checked').value === 'envio' ? 'Envío a Domicilio' : 'Recogida en Tienda';
             const address = document.getElementById('address').value || '[Dirección si aplica]';
@@ -894,7 +1312,7 @@ Me gustaría hacer un pedido:
 • Producto: ${product}
 • Nombre: ${name}
 • Teléfono: ${phone}
-• Fecha de entrega: ${date}
+${email && email !== '[Tu email]' ? `• Email: ${email}\n` : ''}• Fecha de entrega: ${date}
 • Método: ${deliveryMethod}
 
 ${deliveryMethod === 'Envío a Domicilio' ? `🚚 *INFORMACIÓN DE ENVÍO:*\n• Dirección: ${address}\n` : ''}
@@ -904,15 +1322,15 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
             
             document.getElementById('whatsappPreview').textContent = whatsappText;
         }
-        
+
         // Agregar eventos para actualizar la vista previa
         document.querySelectorAll('#orderForm input, #orderForm textarea').forEach(input => {
             input.addEventListener('input', updateWhatsAppPreview);
         });
         
         document.getElementById('date').addEventListener('change', updateWhatsAppPreview);
-        
-        // Configurar fecha mínima como hoy
+
+        // Configurar fecha mínima como mañana
         const today = new Date();
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
@@ -920,13 +1338,20 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
         
         // Establecer fecha por defecto para mañana
         document.getElementById('date').value = tomorrow.toISOString().split('T')[0];
-        
+
         // Validar teléfono colombiano
         function validatePhone(phone) {
             const phoneRegex = /^[0-9]{10}$/;
-            return phoneRegex.test(phone);
+            return phoneRegex.test(phone.replace(/\D/g, ''));
         }
-        
+
+        // Validar email
+        function validateEmail(email) {
+            if (!email) return true; // Email es opcional
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
         // Generar enlace de WhatsApp
         document.getElementById('generateBtn').addEventListener('click', function() {
             // Validar formulario
@@ -948,9 +1373,16 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
                 return;
             }
             
-            if (!validatePhone(document.getElementById('phone').value.replace(/\D/g, ''))) {
+            if (!validatePhone(document.getElementById('phone').value)) {
                 showAlert('Por favor ingresa un número de teléfono válido (10 dígitos).', 'error');
                 document.getElementById('phone').focus();
+                return;
+            }
+            
+            const email = document.getElementById('email').value;
+            if (email && !validateEmail(email)) {
+                showAlert('Por favor ingresa un correo electrónico válido.', 'error');
+                document.getElementById('email').focus();
                 return;
             }
             
@@ -972,22 +1404,48 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
             // Codificar para URL
             const encodedText = encodeURIComponent(whatsappText);
             
-            // Número de WhatsApp de la floristería (REEMPLAZA CON TU NÚMERO REAL)
-            // Formato: 573001234567 (sin el +)
-            const phoneNumber = "573001234567";
+            // Número de WhatsApp de la floristería (se obtiene de los datos)
+            const phoneNumber = floristeriaData.configuracion.whatsapp || "573001234567";
             
             // Crear enlace de WhatsApp
             const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedText}`;
             
             // Mostrar mensaje de éxito
-            showAlert('¡Perfecto! Se abrirá WhatsApp con tu pedido listo para enviar.', 'success');
+            showAlert('<i class="fas fa-check-circle"></i> ¡Perfecto! Se abrirá WhatsApp con tu pedido listo para enviar.', 'success');
             
             // Abrir enlace después de un breve retraso
             setTimeout(() => {
                 window.open(whatsappLink, '_blank');
+                
+                // Opcional: Guardar el pedido en localStorage
+                guardarPedidoEnHistorial();
             }, 1000);
         });
-        
+
+        // Guardar pedido en historial
+        function guardarPedidoEnHistorial() {
+            const pedido = {
+                producto: document.getElementById('product').value,
+                nombre: document.getElementById('name').value,
+                telefono: document.getElementById('phone').value,
+                email: document.getElementById('email').value,
+                fecha: document.getElementById('date').value,
+                metodo: document.querySelector('input[name="delivery"]:checked').value,
+                direccion: document.getElementById('address').value,
+                mensaje: document.getElementById('message').value,
+                notas: document.getElementById('notes').value,
+                fechaPedido: new Date().toISOString()
+            };
+            
+            // Obtener historial existente o crear uno nuevo
+            let historial = JSON.parse(localStorage.getItem('historial_pedidos')) || [];
+            historial.unshift(pedido); // Agregar al inicio
+            historial = historial.slice(0, 50); // Mantener solo los últimos 50 pedidos
+            
+            // Guardar en localStorage
+            localStorage.setItem('historial_pedidos', JSON.stringify(historial));
+        }
+
         // Formatear número de teléfono mientras se escribe
         document.getElementById('phone').addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
@@ -995,10 +1453,73 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
             e.target.value = value;
             updateWhatsAppPreview();
         });
-        
-        // Inicializar vista previa
-        updateWhatsAppPreview();
-        
+
+        // Cargar galería de fotos
+        let fotosCargadas = 0;
+        const fotosPorCarga = 4;
+
+        function cargarGaleria() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const fotosDestacadas = floristeriaData.fotos.filter(f => f.destacada);
+            
+            galleryGrid.innerHTML = '';
+            fotosCargadas = 0;
+            
+            // Cargar primeras fotos
+            cargarMasFotos();
+        }
+
+        function cargarMasFotos() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+            const todasLasFotos = floristeriaData.fotos;
+            
+            // Cargar las siguientes fotos
+            for (let i = fotosCargadas; i < Math.min(fotosCargadas + fotosPorCarga, todasLasFotos.length); i++) {
+                const foto = todasLasFotos[i];
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.innerHTML = `
+                    <img src="${foto.url}" alt="Foto ${foto.id}">
+                    <div class="gallery-overlay">
+                        <p>${foto.categoria.charAt(0).toUpperCase() + foto.categoria.slice(1)}</p>
+                    </div>
+                `;
+                galleryGrid.appendChild(galleryItem);
+            }
+            
+            fotosCargadas += fotosPorCarga;
+            
+            // Ocultar botón si no hay más fotos
+            if (fotosCargadas >= todasLasFotos.length) {
+                loadMoreBtn.style.display = 'none';
+            }
+        }
+
+        // Actualizar botón de WhatsApp flotante
+        function actualizarWhatsAppButton() {
+            const whatsappFloat = document.querySelector('.whatsapp-float');
+            const phoneNumber = floristeriaData.configuracion.whatsapp || "573001234567";
+            whatsappFloat.href = `https://wa.me/${phoneNumber}`;
+        }
+
+        // Actualizar información de contacto en el footer
+        function actualizarInformacionContacto() {
+            const config = floristeriaData.configuracion;
+            
+            // Actualizar dirección si existe en los datos
+            const addressElement = document.querySelector('.footer-column ul li:nth-child(1) span');
+            if (addressElement && config.direccion) {
+                addressElement.textContent = config.direccion;
+            }
+            
+            // Actualizar horario si existe en los datos
+            const scheduleElement = document.querySelector('.footer-column ul li:nth-child(4) span');
+            if (scheduleElement && config.horario) {
+                scheduleElement.textContent = `Horario: ${config.horario}`;
+            }
+        }
+
         // Suavizar scroll para enlaces internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -1016,13 +1537,63 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
                 }
             });
         });
-        
-        // Cargar productos desde una API ficticia (simulación)
-        window.addEventListener('load', function() {
-            // Simular carga de productos
+
+        // Actualizar año actual en el footer
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Inicializar vista previa
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos
+            cargarDatos();
+            updateWhatsAppPreview();
+            
+            // Animaciones al hacer scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+            
+            // Observar elementos para animación
+            document.querySelectorAll('section').forEach(section => {
+                observer.observe(section);
+            });
+            
+            // Mostrar mensaje de bienvenida
             setTimeout(() => {
-                console.log('Página cargada correctamente');
-            }, 500);
+                if (!localStorage.getItem('bienvenida_mostrada')) {
+                    showAlert('<i class="fas fa-seedling"></i> ¡Bienvenido a Floristería Santa Bárbara! 🌸', 'success');
+                    localStorage.setItem('bienvenida_mostrada', 'true');
+                }
+            }, 1000);
+        });
+
+        // Cerrar modal haciendo clic fuera (si hubiera modales)
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        });
+
+        // Función para recargar datos desde el panel administrativo
+        function recargarDatosDesdePanel() {
+            // Esta función sería llamada desde el panel administrativo
+            // cuando se guarden cambios
+            cargarDatos();
+        }
+
+        // Si el panel administrativo guarda datos, recargar automáticamente
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'floristeria_sistema') {
+                cargarDatos();
+            }
         });
     </script>
 </body>
