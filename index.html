@@ -391,7 +391,7 @@
             margin-bottom: 30px;
             white-space: pre-line;
             border-left: 4px solid #25D366;
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
         }
         
@@ -406,6 +406,34 @@
             color: #25D366;
             margin-right: 10px;
             font-size: 1.2rem;
+        }
+        
+        /* Vista previa de producto seleccionado */
+        .selected-product-preview {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid var(--primary-green);
+        }
+        
+        .selected-product-preview img {
+            max-width: 200px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 3px solid var(--primary-green);
+        }
+        
+        .product-code {
+            display: inline-block;
+            background: var(--primary-green);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
         }
         
         /* Alertas */
@@ -743,7 +771,7 @@
 </head>
 <body>
     <!-- Botón WhatsApp flotante -->
-    <a href="https://wa.me/50686053613" target="_blank" class="whatsapp-float">
+    <a href="https://wa.me/573001234567" target="_blank" class="whatsapp-float">
         <i class="fab fa-whatsapp"></i>
         <span class="whatsapp-tooltip">¡Haz tu pedido por WhatsApp!</span>
     </a>
@@ -798,7 +826,7 @@
         </div>
         
         <div class="products-grid" id="productsGrid">
-            <!-- Los productos se cargarán dinámicamente con JavaScript -->
+            <!-- Los productos se cargarán dinámicamente -->
         </div>
         
         <div class="loading" id="productsLoading">
@@ -876,6 +904,11 @@
                     <div class="form-group">
                         <label for="product" class="required">Producto Seleccionado</label>
                         <input type="text" id="product" class="form-control" placeholder="Selecciona un producto de la lista arriba" readonly required>
+                    </div>
+                    
+                    <!-- Vista previa del producto seleccionado -->
+                    <div id="selectedProductPreview" class="selected-product-preview" style="display: none;">
+                        <!-- Se llena dinámicamente -->
                     </div>
                     
                     <div class="form-row">
@@ -961,10 +994,10 @@
                 
                 <div class="whatsapp-instructions">
                     <p><i class="fab fa-whatsapp"></i> <strong>Instrucciones:</strong></p>
-                    <p>1. Completa todos los campos obligatorios (*)</p>
-                    <p>2. Revisa la vista previa del mensaje</p>
-                    <p>3. Haz clic en "Generar Pedido por WhatsApp"</p>
-                    <p>4. Se abrirá WhatsApp con el mensaje completo listo para enviar</p>
+                    <p>1. Selecciona un producto (aparecerá su imagen y código)</p>
+                    <p>2. Completa todos los campos obligatorios (*)</p>
+                    <p>3. Revisa la vista previa del mensaje</p>
+                    <p>4. Haz clic en "Generar Pedido por WhatsApp"</p>
                 </div>
             </div>
         </div>
@@ -1019,109 +1052,147 @@
     </footer>
 
     <script>
-        // Datos de la floristería (se cargan desde localStorage o datos por defecto)
+        // Datos de la floristería
         let floristeriaData = {
             productos: [],
             fotos: [],
             configuracion: {
-                whatsapp: "50686053613",
+                whatsapp: "573001234567",
                 nombreNegocio: "Floristería Santa Bárbara",
                 horario: "Lunes a Sábado 8am - 7pm",
-                direccion: "Av.6 Calle 2 , Heredia, Santa Bárbara."
+                direccion: "Av. Principal #123, Ciudad"
             }
         };
 
-        // Cargar datos del localStorage
-        function cargarDatos() {
-            const datosGuardados = localStorage.getItem('floristeria_sistema');
-            if (datosGuardados) {
-                const datos = JSON.parse(datosGuardados);
-                floristeriaData.productos = datos.productos || [];
-                floristeriaData.fotos = datos.fotos || [];
-                floristeriaData.configuracion = datos.configuracion || floristeriaData.configuracion;
-            } else {
-                // Datos por defecto
-                floristeriaData.productos = [
-                    { 
-                        id: 1, 
-                        nombre: "Ramo de Rosas Rojas", 
-                        categoria: "rosas", 
-                        precio: 45000, 
-                        precioEspecial: 40500,
-                        descripcion: "Clásico y elegante ramo de 12 rosas rojas, perfecto para expresar amor y pasión.", 
-                        estado: true, 
-                        imagenes: ["https://images.unsplash.com/photo-1563178406-4cdc2923acbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
-                        stock: 15 
-                    },
-                    { 
-                        id: 2, 
-                        nombre: "Arreglo Tropical", 
-                        categoria: "arreglos", 
-                        precio: 55000, 
-                        precioEspecial: null,
-                        descripcion: "Colorido arreglo con flores exóticas que transmiten energía y alegría.", 
-                        estado: true, 
-                        imagenes: ["https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
-                        stock: 8 
-                    },
-                    { 
-                        id: 3, 
-                        nombre: "Centro de Mesa Elegante", 
-                        categoria: "arreglos", 
-                        precio: 65000, 
-                        precioEspecial: 55250,
-                        descripcion: "Exquisito centro de mesa con flores de temporada para eventos especiales.", 
-                        estado: true, 
-                        imagenes: ["https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
-                        stock: 5 
-                    },
-                    { 
-                        id: 4, 
-                        nombre: "Cesta de Girasoles", 
-                        categoria: "arreglos", 
-                        precio: 40000, 
-                        precioEspecial: null,
-                        descripcion: "Radiante cesta con girasoles frescos que iluminarán cualquier espacio.", 
-                        estado: true, 
-                        imagenes: ["https://images.unsplash.com/photo-1557090495-fc9312e77b56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
-                        stock: 10 
-                    },
-                    { 
-                        id: 5, 
-                        nombre: "Orquídea Elegante", 
-                        categoria: "plantas", 
-                        precio: 35000, 
-                        precioEspecial: 31500,
-                        descripcion: "Hermosa orquídea en maceta, perfecta para decoración de interiores.", 
-                        estado: true, 
-                        imagenes: ["https://images.unsplash.com/photo-1485955900006-10f4d324d411?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
-                        stock: 12 
-                    },
-                    { 
-                        id: 6, 
-                        nombre: "Ramo Navideño", 
-                        categoria: "temporada", 
-                        precio: 48000, 
-                        precioEspecial: 43200,
-                        descripcion: "Especial para Navidad con flores rojas y verdes decorativas.", 
-                        estado: true, 
-                        imagenes: ["https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
-                        stock: 7 
-                    }
-                ];
+        // Producto seleccionado actualmente
+        let productoSeleccionado = null;
 
-                floristeriaData.fotos = [
-                    { id: 1, url: "https://images.unsplash.com/photo-1447875569765-2b3db822bec9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "local", destacada: true },
-                    { id: 2, url: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "productos", destacada: true },
-                    { id: 3, url: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "eventos", destacada: true },
-                    { id: 4, url: "https://images.unsplash.com/photo-1563630485130-c5181d691c93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "trabajos", destacada: true },
-                    { id: 5, url: "https://images.unsplash.com/photo-1518623489648-a173ef7824f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "productos", destacada: false },
-                    { id: 6, url: "https://images.unsplash.com/photo-1459156212016-c812468e2115?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "eventos", destacada: false }
-                ];
+        // Cargar datos del localStorage o del archivo data/sistema.json
+        async function cargarDatos() {
+            try {
+                // Intentar cargar desde localStorage primero
+                const datosGuardados = localStorage.getItem('floristeria_sistema');
+                if (datosGuardados) {
+                    const datos = JSON.parse(datosGuardados);
+                    floristeriaData.productos = datos.productos || [];
+                    floristeriaData.fotos = datos.fotos || [];
+                    floristeriaData.configuracion = datos.configuracion || floristeriaData.configuracion;
+                } else {
+                    // Si no hay datos en localStorage, cargar desde archivo JSON
+                    await cargarDatosDesdeJSON();
+                }
+                
+                actualizarDatosPagina();
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                cargarDatosEjemplo();
             }
+        }
 
-            // Actualizar datos en la página
-            actualizarDatosPagina();
+        // Cargar datos desde archivo JSON externo
+        async function cargarDatosDesdeJSON() {
+            try {
+                const response = await fetch('data/sistema.json');
+                if (response.ok) {
+                    const datos = await response.json();
+                    floristeriaData.productos = datos.productos || [];
+                    floristeriaData.fotos = datos.fotos || [];
+                    floristeriaData.configuracion = datos.configuracion || floristeriaData.configuracion;
+                    
+                    // Guardar en localStorage para futuras visitas
+                    localStorage.setItem('floristeria_sistema', JSON.stringify(datos));
+                } else {
+                    throw new Error('No se pudo cargar el archivo JSON');
+                }
+            } catch (error) {
+                console.warn('No se pudo cargar data/sistema.json, usando datos de ejemplo');
+                cargarDatosEjemplo();
+            }
+        }
+
+        // Datos de ejemplo iniciales
+        function cargarDatosEjemplo() {
+            floristeriaData.productos = [
+                { 
+                    id: 1, 
+                    codigo: "SB-ROS-006-R",
+                    nombre: "Ramo de 6 Rosas Rojas Premium", 
+                    categoria: "rosas", 
+                    precio: 45000, 
+                    precioEspecial: 40500,
+                    descripcion: "Clásico y elegante ramo de 6 rosas rojas premium, perfecto para expresar amor y pasión.", 
+                    estado: true, 
+                    imagenes: ["https://images.unsplash.com/photo-1563178406-4cdc2923acbc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                    stock: 15 
+                },
+                { 
+                    id: 2, 
+                    codigo: "SB-ARR-TROP",
+                    nombre: "Arreglo Tropical", 
+                    categoria: "arreglos", 
+                    precio: 55000, 
+                    precioEspecial: null,
+                    descripcion: "Colorido arreglo con flores exóticas que transmiten energía y alegría.", 
+                    estado: true, 
+                    imagenes: ["https://images.unsplash.com/photo-1519378058457-4c29a0a2efac?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                    stock: 8 
+                },
+                { 
+                    id: 3, 
+                    codigo: "SB-ARR-CENTRO",
+                    nombre: "Centro de Mesa Elegante", 
+                    categoria: "arreglos", 
+                    precio: 65000, 
+                    precioEspecial: 55250,
+                    descripcion: "Exquisito centro de mesa con flores de temporada para eventos especiales.", 
+                    estado: true, 
+                    imagenes: ["https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                    stock: 5 
+                },
+                { 
+                    id: 4, 
+                    codigo: "SB-GIR-001",
+                    nombre: "Cesta de Girasoles", 
+                    categoria: "arreglos", 
+                    precio: 40000, 
+                    precioEspecial: null,
+                    descripcion: "Radiante cesta con girasoles frescos que iluminarán cualquier espacio.", 
+                    estado: true, 
+                    imagenes: ["https://images.unsplash.com/photo-1557090495-fc9312e77b56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                    stock: 10 
+                },
+                { 
+                    id: 5, 
+                    codigo: "SB-PLA-ORQ",
+                    nombre: "Orquídea Elegante", 
+                    categoria: "plantas", 
+                    precio: 35000, 
+                    precioEspecial: 31500,
+                    descripcion: "Hermosa orquídea en maceta, perfecta para decoración de interiores.", 
+                    estado: true, 
+                    imagenes: ["https://images.unsplash.com/photo-1485955900006-10f4d324d411?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                    stock: 12 
+                },
+                { 
+                    id: 6, 
+                    codigo: "SB-TEM-NAV",
+                    nombre: "Ramo Navideño Especial", 
+                    categoria: "temporada", 
+                    precio: 48000, 
+                    precioEspecial: 43200,
+                    descripcion: "Especial para Navidad con flores rojas, verdes y decoraciones doradas.", 
+                    estado: true, 
+                    imagenes: ["https://images.unsplash.com/photo-1513885535751-8b9238bd345a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"],
+                    stock: 7 
+                }
+            ];
+
+            floristeriaData.fotos = [
+                { id: 1, url: "https://images.unsplash.com/photo-1447875569765-2b3db822bec9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "local", destacada: true },
+                { id: 2, url: "https://images.unsplash.com/photo-1488459716781-31db52582fe9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "productos", destacada: true },
+                { id: 3, url: "https://images.unsplash.com/photo-1526047932273-341f2a7631f9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "eventos", destacada: true },
+                { id: 4, url: "https://images.unsplash.com/photo-1563630485130-c5181d691c93?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", categoria: "trabajos", destacada: true }
+            ];
         }
 
         // Función para actualizar los datos en la página
@@ -1135,7 +1206,6 @@
         // Menú móvil
         document.getElementById('mobileMenuBtn').addEventListener('click', function() {
             document.getElementById('navMenu').classList.toggle('active');
-            // Cambiar ícono
             const icon = this.querySelector('i');
             if (icon.classList.contains('fa-bars')) {
                 icon.classList.replace('fa-bars', 'fa-times');
@@ -1174,11 +1244,9 @@
             const productsGrid = document.getElementById('productsGrid');
             const loading = document.getElementById('productsLoading');
             
-            // Mostrar loading
             loading.style.display = 'block';
             productsGrid.innerHTML = '';
             
-            // Simular carga
             setTimeout(() => {
                 const productosActivos = floristeriaData.productos.filter(p => p.estado);
                 
@@ -1196,14 +1264,25 @@
                         const descuento = producto.precioEspecial ? 
                             Math.round((1 - producto.precioEspecial / producto.precio) * 100) : 0;
                         
+                        // Usar código del producto o generar uno automático
+                        const codigo = producto.codigo || `SB-${producto.id.toString().padStart(3, '0')}`;
+                        const imagenPrincipal = producto.imagenes && producto.imagenes.length > 0 ? 
+                            producto.imagenes[0] : 
+                            'https://images.unsplash.com/photo-1557090495-fc9312e77b56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                        
                         productsGrid.innerHTML += `
                             <div class="product-card" data-category="${producto.categoria}">
-                                <img src="${producto.imagenes[0] || 'https://images.unsplash.com/photo-1557090495-fc9312e77b56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'}" 
+                                <img src="${imagenPrincipal}" 
                                      alt="${producto.nombre}" 
                                      class="product-img">
                                 <div class="product-info">
-                                    <h3>${producto.nombre}</h3>
-                                    <p>${producto.descripcion}</p>
+                                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+                                        <h3 style="margin: 0; flex: 1;">${producto.nombre}</h3>
+                                        <span class="product-code" style="background: var(--primary-green); color: white; padding: 3px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold;">
+                                            ${codigo}
+                                        </span>
+                                    </div>
+                                    <p style="font-size: 0.95rem; color: #666; margin-bottom: 15px;">${producto.descripcion}</p>
                                     <div class="product-price">
                                         ${producto.precioEspecial ? 
                                             `<span class="product-old-price">$${producto.precio.toLocaleString()}</span>` : 
@@ -1213,9 +1292,14 @@
                                         ${descuento > 0 ? `<span class="product-discount">-${descuento}%</span>` : ''}
                                     </div>
                                     <button class="btn select-product" 
-                                            data-name="${producto.nombre}" 
-                                            data-price="${precioMostrar}"
-                                            onclick="seleccionarProducto('${producto.nombre}', ${precioMostrar})">
+                                            onclick="seleccionarProducto(
+                                                ${producto.id}, 
+                                                '${producto.nombre.replace(/'/g, "\\'")}', 
+                                                ${precioMostrar}, 
+                                                '${codigo}', 
+                                                '${imagenPrincipal.replace(/'/g, "\\'")}',
+                                                '${producto.descripcion.replace(/'/g, "\\'")}'
+                                            )">
                                         Seleccionar
                                     </button>
                                 </div>
@@ -1229,6 +1313,66 @@
             }, 500);
         }
 
+        // Seleccionar producto
+        function seleccionarProducto(id, nombre, precio, codigo, imagenUrl, descripcion) {
+            // Guardar toda la información del producto
+            productoSeleccionado = {
+                id: id,
+                nombre: nombre,
+                precio: precio,
+                codigo: codigo,
+                imagenUrl: imagenUrl,
+                descripcion: descripcion
+            };
+            
+            // Mostrar en el formulario
+            document.getElementById('product').value = `${codigo} - ${nombre} - $${precio.toLocaleString()}`;
+            
+            // Mostrar vista previa del producto seleccionado
+            mostrarProductoSeleccionado();
+            
+            // Actualizar vista previa de WhatsApp
+            updateWhatsAppPreview();
+            
+            // Desplazar suavemente al formulario
+            document.getElementById('pedidos').scrollIntoView({ behavior: 'smooth' });
+            
+            // Mostrar notificación
+            showAlert(`<i class="fas fa-check-circle"></i> Producto "${codigo}" seleccionado`, 'success');
+        }
+
+        // Mostrar vista previa del producto seleccionado
+        function mostrarProductoSeleccionado() {
+            const previewContainer = document.getElementById('selectedProductPreview');
+            
+            if (productoSeleccionado && productoSeleccionado.imagenUrl) {
+                previewContainer.innerHTML = `
+                    <div class="product-code">${productoSeleccionado.codigo}</div>
+                    <img src="${productoSeleccionado.imagenUrl}" 
+                         alt="${productoSeleccionado.nombre}" 
+                         style="max-width: 200px; border-radius: 8px; margin-bottom: 10px; border: 3px solid var(--primary-green);">
+                    <p style="font-weight: bold; margin-bottom: 5px;">${productoSeleccionado.nombre}</p>
+                    <p style="color: var(--accent-pink); font-weight: bold; font-size: 1.2rem;">
+                        $${productoSeleccionado.precio.toLocaleString()}
+                    </p>
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">
+                        ${productoSeleccionado.descripcion}
+                    </p>
+                `;
+                previewContainer.style.display = 'block';
+            } else {
+                previewContainer.innerHTML = `
+                    <div class="product-code">${productoSeleccionado?.codigo || 'Sin código'}</div>
+                    <p style="padding: 15px; background: #f0f0f0; border-radius: 8px; margin: 10px 0;">
+                        <i class="fas fa-image" style="color: #ccc; font-size: 2rem; display: block; margin-bottom: 10px;"></i>
+                        ${productoSeleccionado?.nombre || 'Producto seleccionado'}<br>
+                        <small>Imagen no disponible</small>
+                    </p>
+                `;
+                previewContainer.style.display = 'block';
+            }
+        }
+
         // Filtro de categorías
         function initCategoryFilter() {
             const categoryBtns = document.querySelectorAll('.category-btn');
@@ -1236,14 +1380,11 @@
             
             categoryBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
-                    // Remover activo de todos los botones
                     categoryBtns.forEach(b => b.classList.remove('active'));
-                    // Agregar activo al botón clickeado
                     this.classList.add('active');
                     
                     const category = this.getAttribute('data-category');
                     
-                    // Filtrar productos
                     productCards.forEach(card => {
                         if (category === 'todos' || card.getAttribute('data-category') === category) {
                             card.style.display = 'block';
@@ -1253,18 +1394,6 @@
                     });
                 });
             });
-        }
-
-        // Seleccionar producto
-        function seleccionarProducto(nombre, precio) {
-            document.getElementById('product').value = `${nombre} - $${precio.toLocaleString()}`;
-            updateWhatsAppPreview();
-            
-            // Desplazar suavemente al formulario
-            document.getElementById('pedidos').scrollIntoView({ behavior: 'smooth' });
-            
-            // Mostrar notificación
-            showAlert(`<i class="fas fa-check-circle"></i> Producto "${nombre}" seleccionado`, 'success');
         }
 
         // Mostrar/ocultar campo de dirección según método de entrega
@@ -1294,7 +1423,13 @@
 
         // Actualizar vista previa del mensaje de WhatsApp
         function updateWhatsAppPreview() {
-            const product = document.getElementById('product').value || '[Selecciona un producto]';
+            if (!productoSeleccionado) {
+                document.getElementById('whatsappPreview').textContent = `¡Hola Floristería Santa Bárbara! 👋
+
+Me gustaría hacer un pedido. Por favor selecciono un producto en la página web.`;
+                return;
+            }
+            
             const name = document.getElementById('name').value || '[Tu nombre aparecerá aquí]';
             const phone = document.getElementById('phone').value || '[Tu teléfono]';
             const email = document.getElementById('email').value || '[Tu email]';
@@ -1304,21 +1439,29 @@
             const message = document.getElementById('message').value || '[Mensaje opcional]';
             const notes = document.getElementById('notes').value || '[Instrucciones especiales]';
             
+            // Formato mejorado para WhatsApp
             const whatsappText = `¡Hola Floristería Santa Bárbara! 👋
 
-Me gustaría hacer un pedido:
+📋 *PEDIDO DESDE LA WEB - ${productoSeleccionado.codigo}*
 
-📋 *INFORMACIÓN DEL PEDIDO:*
-• Producto: ${product}
-• Nombre: ${name}
-• Teléfono: ${phone}
-${email && email !== '[Tu email]' ? `• Email: ${email}\n` : ''}• Fecha de entrega: ${date}
-• Método: ${deliveryMethod}
+🆔 *Código:* ${productoSeleccionado.codigo}
+🏷️ *Producto:* ${productoSeleccionado.nombre}
+💰 *Precio:* $${productoSeleccionado.precio.toLocaleString()}
+📝 *Descripción:* ${productoSeleccionado.descripcion}
+${productoSeleccionado.imagenUrl ? `📸 *Imagen:* ${productoSeleccionado.imagenUrl}\n` : ''}
+👤 *Cliente:* ${name}
+📞 *Teléfono:* ${phone}
+${email && email !== '[Tu email]' ? `📧 *Email:* ${email}\n` : ''}📅 *Fecha de entrega:* ${date}
+🚚 *Método:* ${deliveryMethod}
 
-${deliveryMethod === 'Envío a Domicilio' ? `🚚 *INFORMACIÓN DE ENVÍO:*\n• Dirección: ${address}\n` : ''}
-${message !== '[Mensaje opcional]' ? `💌 *MENSAJE PARA TARJETA:*\n${message}\n` : ''}
-${notes !== '[Instrucciones especiales]' ? `📝 *INSTRUCCIONES ESPECIALES:*\n${notes}\n` : ''}
-Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
+${deliveryMethod === 'Envío a Domicilio' ? `📍 *Dirección:* ${address}\n` : ''}
+${message !== '[Mensaje opcional]' ? `💌 *Mensaje para tarjeta:* ${message}\n` : ''}
+${notes !== '[Instrucciones especiales]' ? `📝 *Instrucciones especiales:* ${notes}\n` : ''}
+---
+✅ *Pedido generado automáticamente desde la web*
+🔗 *Página:* https://k3sb12.github.io/Floristeria-Santa-B-rbara-/
+
+Por favor confírmenme disponibilidad y confirmen el pedido. ¡Gracias! 🌸`;
             
             document.getElementById('whatsappPreview').textContent = whatsappText;
         }
@@ -1335,8 +1478,6 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
         document.getElementById('date').min = tomorrow.toISOString().split('T')[0];
-        
-        // Establecer fecha por defecto para mañana
         document.getElementById('date').value = tomorrow.toISOString().split('T')[0];
 
         // Validar teléfono colombiano
@@ -1354,13 +1495,14 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
 
         // Generar enlace de WhatsApp
         document.getElementById('generateBtn').addEventListener('click', function() {
-            // Validar formulario
-            if (!document.getElementById('product').value) {
+            // Validar que hay producto seleccionado
+            if (!productoSeleccionado) {
                 showAlert('Por favor selecciona un producto de la lista.', 'error');
-                document.getElementById('product').focus();
+                document.getElementById('productos').scrollIntoView({ behavior: 'smooth' });
                 return;
             }
             
+            // Validar formulario
             if (!document.getElementById('name').value) {
                 showAlert('Por favor ingresa tu nombre completo.', 'error');
                 document.getElementById('name').focus();
@@ -1404,20 +1546,18 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
             // Codificar para URL
             const encodedText = encodeURIComponent(whatsappText);
             
-            // Número de WhatsApp de la floristería (se obtiene de los datos)
+            // Número de WhatsApp de la floristería
             const phoneNumber = floristeriaData.configuracion.whatsapp || "573001234567";
             
             // Crear enlace de WhatsApp
             const whatsappLink = `https://wa.me/${phoneNumber}?text=${encodedText}`;
             
             // Mostrar mensaje de éxito
-            showAlert('<i class="fas fa-check-circle"></i> ¡Perfecto! Se abrirá WhatsApp con tu pedido listo para enviar.', 'success');
+            showAlert(`<i class="fas fa-check-circle"></i> ¡Perfecto! Pedido ${productoSeleccionado.codigo} listo para enviar por WhatsApp.`, 'success');
             
             // Abrir enlace después de un breve retraso
             setTimeout(() => {
                 window.open(whatsappLink, '_blank');
-                
-                // Opcional: Guardar el pedido en localStorage
                 guardarPedidoEnHistorial();
             }, 1000);
         });
@@ -1425,7 +1565,10 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
         // Guardar pedido en historial
         function guardarPedidoEnHistorial() {
             const pedido = {
-                producto: document.getElementById('product').value,
+                codigo: productoSeleccionado.codigo,
+                producto: productoSeleccionado.nombre,
+                precio: productoSeleccionado.precio,
+                imagen: productoSeleccionado.imagenUrl,
                 nombre: document.getElementById('name').value,
                 telefono: document.getElementById('phone').value,
                 email: document.getElementById('email').value,
@@ -1437,12 +1580,9 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
                 fechaPedido: new Date().toISOString()
             };
             
-            // Obtener historial existente o crear uno nuevo
             let historial = JSON.parse(localStorage.getItem('historial_pedidos')) || [];
-            historial.unshift(pedido); // Agregar al inicio
-            historial = historial.slice(0, 50); // Mantener solo los últimos 50 pedidos
-            
-            // Guardar en localStorage
+            historial.unshift(pedido);
+            historial = historial.slice(0, 50);
             localStorage.setItem('historial_pedidos', JSON.stringify(historial));
         }
 
@@ -1460,12 +1600,8 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
 
         function cargarGaleria() {
             const galleryGrid = document.getElementById('galleryGrid');
-            const fotosDestacadas = floristeriaData.fotos.filter(f => f.destacada);
-            
             galleryGrid.innerHTML = '';
             fotosCargadas = 0;
-            
-            // Cargar primeras fotos
             cargarMasFotos();
         }
 
@@ -1474,7 +1610,6 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
             const loadMoreBtn = document.getElementById('loadMoreBtn');
             const todasLasFotos = floristeriaData.fotos;
             
-            // Cargar las siguientes fotos
             for (let i = fotosCargadas; i < Math.min(fotosCargadas + fotosPorCarga, todasLasFotos.length); i++) {
                 const foto = todasLasFotos[i];
                 const galleryItem = document.createElement('div');
@@ -1490,7 +1625,6 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
             
             fotosCargadas += fotosPorCarga;
             
-            // Ocultar botón si no hay más fotos
             if (fotosCargadas >= todasLasFotos.length) {
                 loadMoreBtn.style.display = 'none';
             }
@@ -1507,13 +1641,11 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
         function actualizarInformacionContacto() {
             const config = floristeriaData.configuracion;
             
-            // Actualizar dirección si existe en los datos
             const addressElement = document.querySelector('.footer-column ul li:nth-child(1) span');
             if (addressElement && config.direccion) {
                 addressElement.textContent = config.direccion;
             }
             
-            // Actualizar horario si existe en los datos
             const scheduleElement = document.querySelector('.footer-column ul li:nth-child(4) span');
             if (scheduleElement && config.horario) {
                 scheduleElement.textContent = `Horario: ${config.horario}`;
@@ -1541,27 +1673,23 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
         // Actualizar año actual en el footer
         document.getElementById('currentYear').textContent = new Date().getFullYear();
 
-        // Inicializar vista previa
+        // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
-            // Cargar datos
             cargarDatos();
             updateWhatsAppPreview();
             
             // Animaciones al hacer scroll
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-            
             const observer = new IntersectionObserver(function(entries) {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('fade-in');
                     }
                 });
-            }, observerOptions);
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
             
-            // Observar elementos para animación
             document.querySelectorAll('section').forEach(section => {
                 observer.observe(section);
             });
@@ -1575,21 +1703,7 @@ Por favor confírmenme disponibilidad y costo total. ¡Gracias! 🌸`;
             }, 1000);
         });
 
-        // Cerrar modal haciendo clic fuera (si hubiera modales)
-        window.addEventListener('click', function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        });
-
-        // Función para recargar datos desde el panel administrativo
-        function recargarDatosDesdePanel() {
-            // Esta función sería llamada desde el panel administrativo
-            // cuando se guarden cambios
-            cargarDatos();
-        }
-
-        // Si el panel administrativo guarda datos, recargar automáticamente
+        // Escuchar cambios desde el panel administrativo
         window.addEventListener('storage', function(event) {
             if (event.key === 'floristeria_sistema') {
                 cargarDatos();
