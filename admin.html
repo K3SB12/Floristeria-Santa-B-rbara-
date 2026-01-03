@@ -1,0 +1,2061 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Floristería Santa Bárbara | Panel Administrativo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #4caf50;
+            --accent-pink: #e91e63;
+            --dark-bg: #1a1a2e;
+            --sidebar-bg: #162447;
+            --sidebar-active: #1f4068;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            background: var(--sidebar-bg);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background: var(--dark-bg);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-header h3 {
+            color: white;
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        
+        .sidebar-header p {
+            color: #b0b0b0;
+            font-size: 0.9rem;
+            margin: 5px 0 0 0;
+        }
+        
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .sidebar-menu li {
+            margin: 5px 0;
+        }
+        
+        .sidebar-menu a {
+            color: #b0b0b0;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            color: white;
+            background: var(--sidebar-active);
+            border-left: 3px solid var(--accent-pink);
+        }
+        
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+        
+        .content-header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .content-body {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        /* Cards */
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border-top: 4px solid var(--primary-green);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--primary-green);
+            margin-bottom: 15px;
+        }
+        
+        .stat-card h3 {
+            font-size: 1.8rem;
+            margin: 0;
+            color: #333;
+        }
+        
+        .stat-card p {
+            color: #666;
+            margin: 5px 0 0 0;
+        }
+        
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+        }
+        
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .admin-table th {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .admin-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #dee2e6;
+            vertical-align: middle;
+        }
+        
+        .admin-table tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+            outline: none;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary-green);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1b5e20;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #333;
+        }
+        
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.9rem;
+        }
+        
+        /* Badges */
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        /* Tabs */
+        .tab-nav {
+            display: flex;
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .tab-nav button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .tab-nav button.active {
+            color: var(--primary-green);
+        }
+        
+        .tab-nav button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-green);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Image Upload */
+        .image-upload-container {
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .image-upload-container:hover {
+            border-color: var(--primary-green);
+            background: #f8fff9;
+        }
+        
+        .image-upload-container i {
+            font-size: 3rem;
+            color: #999;
+            margin-bottom: 15px;
+        }
+        
+        .image-preview {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .preview-image {
+            position: relative;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        
+        .preview-image img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .preview-image .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            border: none;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .modal-header {
+            padding: 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-body {
+            padding: 20px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+                overflow: hidden;
+            }
+            
+            .sidebar:hover {
+                width: 250px;
+            }
+            
+            .sidebar-header h3,
+            .sidebar-header p,
+            .sidebar-menu a span {
+                display: none;
+            }
+            
+            .sidebar:hover .sidebar-header h3,
+            .sidebar:hover .sidebar-header p,
+            .sidebar:hover .sidebar-menu a span {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .sidebar:hover + .main-content {
+                margin-left: 250px;
+            }
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-green);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(30px);
+        }
+        
+        .slider.round {
+            border-radius: 34px;
+        }
+        
+        .slider.round:before {
+            border-radius: 50%;
+        }
+        
+        /* Color Picker */
+        .color-picker {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .color-option.selected {
+            border-color: #333;
+            transform: scale(1.1);
+        }
+        
+        /* Date Range */
+        .date-range {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .date-range input {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3>🌺 Santa Bárbara Admin</h3>
+            <p>Panel de Administración</p>
+        </div>
+        
+        <div class="sidebar-menu">
+            <ul>
+                <li><a href="#" class="active" data-tab="dashboard"><i class="fas fa-home"></i> <span>Dashboard</span></a></li>
+                <li><a href="#" data-tab="categorias"><i class="fas fa-tags"></i> <span>Categorías</span></a></li>
+                <li><a href="#" data-tab="productos"><i class="fas fa-box"></i> <span>Productos</span></a></li>
+                <li><a href="#" data-tab="galeria"><i class="fas fa-images"></i> <span>Galería</span></a></li>
+                <li><a href="#" data-tab="precios"><i class="fas fa-dollar-sign"></i> <span>Precios Especiales</span></a></li>
+                <li><a href="#" data-tab="temporadas"><i class="fas fa-calendar-alt"></i> <span>Temporadas</span></a></li>
+                <li><a href="#" data-tab="configuracion"><i class="fas fa-cog"></i> <span>Configuración</span></a></li>
+                <li><a href="index.html" target="_blank"><i class="fas fa-external-link-alt"></i> <span>Ver Sitio Web</span></a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard -->
+        <div id="dashboard" class="tab-content active">
+            <div class="content-header">
+                <h2>Dashboard</h2>
+                <p>Bienvenido al panel de administración de Floristería Santa Bárbara</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <i class="fas fa-box"></i>
+                        <h3 id="totalProductos">0</h3>
+                        <p>Productos Activos</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <i class="fas fa-tags"></i>
+                        <h3 id="totalCategorias">0</h3>
+                        <p>Categorías</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <i class="fas fa-image"></i>
+                        <h3 id="totalFotos">0</h3>
+                        <p>Fotos en Galería</p>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card">
+                        <i class="fas fa-calendar"></i>
+                        <h3 id="temporadasActivas">0</h3>
+                        <p>Temporadas Activas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="content-body">
+                <h4>Resumen Rápido</h4>
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <h5>Productos por Categoría</h5>
+                        <div id="productosPorCategoria" style="height: 300px;"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Actividad Reciente</h5>
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Acción</th>
+                                        <th>Detalle</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="actividadReciente">
+                                    <!-- Se llena con JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categorías -->
+        <div id="categorias" class="tab-content">
+            <div class="content-header">
+                <h2>Gestión de Categorías</h2>
+                <p>Administra las categorías de productos de tu floristería</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Lista de Categorías</h4>
+                    <button class="btn btn-primary" onclick="mostrarModalCategoria()">
+                        <i class="fas fa-plus"></i> Nueva Categoría
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                                <th>Estado</th>
+                                <th>Productos</th>
+                                <th>Temporada</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaCategorias">
+                            <!-- Se llena con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos -->
+        <div id="productos" class="tab-content">
+            <div class="content-header">
+                <h2>Gestión de Productos</h2>
+                <p>Administra todos los productos de tu floristería</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Lista de Productos</h4>
+                    <button class="btn btn-primary" onclick="mostrarModalProducto()">
+                        <i class="fas fa-plus"></i> Nuevo Producto
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio Base</th>
+                                <th>Precio Actual</th>
+                                <th>Estado</th>
+                                <th>Stock</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaProductos">
+                            <!-- Se llena con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Galería -->
+        <div id="galeria" class="tab-content">
+            <div class="content-header">
+                <h2>Galería de Imágenes</h2>
+                <p>Sube y administra las fotos reales de tu floristería</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="tab-nav">
+                    <button class="active" data-gallery-tab="subir">Subir Fotos</button>
+                    <button data-gallery-tab="galeria">Ver Galería</button>
+                    <button data-gallery-tab="destacados">Fotos Destacadas</button>
+                </div>
+                
+                <!-- Subir Fotos -->
+                <div id="subir" class="gallery-tab active">
+                    <div class="image-upload-container" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h5>Arrastra y suelta fotos aquí</h5>
+                        <p>o haz clic para seleccionar archivos</p>
+                        <p class="text-muted">Formatos: JPG, PNG, GIF (Máx. 5MB cada una)</p>
+                        <input type="file" id="fileInput" multiple accept="image/*" style="display: none;" onchange="previewImages(event)">
+                    </div>
+                    
+                    <div class="image-preview" id="imagePreview">
+                        <!-- Vista previa de imágenes -->
+                    </div>
+                    
+                    <div class="form-group mt-3">
+                        <label class="form-label">Categoría de las fotos</label>
+                        <select id="categoriaFoto" class="form-control">
+                            <option value="productos">Productos</option>
+                            <option value="local">Local</option>
+                            <option value="eventos">Eventos</option>
+                            <option value="trabajos">Trabajos Realizados</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="subirFotos()" id="btnSubirFotos" disabled>
+                        <i class="fas fa-upload"></i> Subir Fotos
+                    </button>
+                </div>
+                
+                <!-- Ver Galería -->
+                <div id="galeria" class="gallery-tab">
+                    <div class="row" id="galeriaFotos">
+                        <!-- Fotos cargadas -->
+                    </div>
+                </div>
+                
+                <!-- Fotos Destacadas -->
+                <div id="destacados" class="gallery-tab">
+                    <p>Selecciona las fotos que quieres mostrar en la página principal</p>
+                    <div class="row" id="fotosDestacadas">
+                        <!-- Fotos destacadas -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Precios Especiales -->
+        <div id="precios" class="tab-content">
+            <div class="content-header">
+                <h2>Precios Especiales</h2>
+                <p>Configura precios por temporada, fechas especiales o promociones</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h4>Reglas de Precios</h4>
+                    <button class="btn btn-primary" onclick="mostrarModalPrecio()">
+                        <i class="fas fa-plus"></i> Nueva Regla
+                    </button>
+                </div>
+                
+                <div class="table-container">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Tipo</th>
+                                <th>Productos/Categorías</th>
+                                <th>Descuento/Aumento</th>
+                                <th>Fechas</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tablaPrecios">
+                            <!-- Se llena con JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Temporadas -->
+        <div id="temporadas" class="tab-content">
+            <div class="content-header">
+                <h2>Gestión de Temporadas</h2>
+                <p>Activa/desactiva categorías según temporadas del año</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Temporadas Configuradas</h4>
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Temporada</th>
+                                        <th>Fechas</th>
+                                        <th>Categorías Activas</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tablaTemporadas">
+                                    <!-- Se llena con JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h4>Configurar Nueva Temporada</h4>
+                        <div class="form-group">
+                            <label class="form-label">Nombre de la Temporada</label>
+                            <input type="text" id="nombreTemporada" class="form-control" placeholder="Ej: Navidad 2024">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Fecha de Inicio y Fin</label>
+                            <div class="date-range">
+                                <input type="date" id="inicioTemporada" class="form-control">
+                                <span>al</span>
+                                <input type="date" id="finTemporada" class="form-control">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Categorías para esta Temporada</label>
+                            <div id="categoriasTemporada">
+                                <!-- Se llena con JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" onclick="guardarTemporada()">
+                            <i class="fas fa-save"></i> Guardar Temporada
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configuración -->
+        <div id="configuracion" class="tab-content">
+            <div class="content-header">
+                <h2>Configuración General</h2>
+                <p>Configura los parámetros generales del sistema</p>
+            </div>
+            
+            <div class="content-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>Información del Negocio</h4>
+                        <div class="form-group">
+                            <label class="form-label">Nombre de la Floristería</label>
+                            <input type="text" id="nombreNegocio" class="form-control" value="Floristería Santa Bárbara">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Teléfono de WhatsApp</label>
+                            <input type="text" id="whatsappNumber" class="form-control" value="573001234567">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Horario de Atención</label>
+                            <input type="text" id="horario" class="form-control" value="Lunes a Sábado 8am - 7pm">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Dirección</label>
+                            <textarea id="direccion" class="form-control" rows="3">Av. Principal #123, Ciudad</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <h4>Configuración del Sitio Web</h4>
+                        <div class="form-group">
+                            <label class="form-label">Colores Principales</label>
+                            <div class="color-picker">
+                                <div class="color-option selected" style="background: #2e7d32;" data-color="#2e7d32"></div>
+                                <div class="color-option" style="background: #e91e63;" data-color="#e91e63"></div>
+                                <div class="color-option" style="background: #2196f3;" data-color="#2196f3"></div>
+                                <div class="color-option" style="background: #9c27b0;" data-color="#9c27b0"></div>
+                                <div class="color-option" style="background: #ff9800;" data-color="#ff9800"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Logo del Sitio</label>
+                            <input type="file" id="logoUpload" class="form-control" accept="image/*">
+                            <small class="text-muted">Recomendado: 200x200px PNG transparente</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">URL del Sitio Web</label>
+                            <input type="text" id="urlSitio" class="form-control" readonly value="https://k3sb12.github.io/Floristeria-Santa-B-rbara-/">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h4>Opciones Avanzadas</h4>
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="mantenimiento"> Modo Mantenimiento
+                            <small class="text-muted">(El sitio no será visible para el público)</small>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">
+                            <input type="checkbox" id="cache"> Limpiar Cache del Sitio
+                            <small class="text-muted">(Forzar actualización para todos los visitantes)</small>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <button class="btn btn-primary" onclick="guardarConfiguracion()">
+                        <i class="fas fa-save"></i> Guardar Configuración
+                    </button>
+                    <button class="btn btn-warning" onclick="exportarDatos()">
+                        <i class="fas fa-download"></i> Exportar Datos
+                    </button>
+                    <button class="btn btn-danger" onclick="importarDatos()">
+                        <i class="fas fa-upload"></i> Importar Datos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Categorías -->
+    <div id="modalCategoria" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalCategoriaTitulo">Nueva Categoría</h3>
+                <button class="close-modal" onclick="cerrarModal('modalCategoria')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre de la Categoría *</label>
+                    <input type="text" id="categoriaNombre" class="form-control" placeholder="Ej: Rosas, Arreglos, Plantas">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Descripción</label>
+                    <textarea id="categoriaDescripcion" class="form-control" rows="3" placeholder="Describe esta categoría"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Imagen de la Categoría</label>
+                    <input type="file" id="categoriaImagen" class="form-control" accept="image/*">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Estado</label>
+                    <label class="switch">
+                        <input type="checkbox" id="categoriaEstado" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span id="estadoTexto">Activa</span>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Solo en Temporada</label>
+                    <select id="categoriaTemporada" class="form-control">
+                        <option value="">Todo el año</option>
+                        <!-- Se llena con JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="d-flex justify-content-end gap-2">
+                    <button class="btn btn-danger" onclick="cerrarModal('modalCategoria')">Cancelar</button>
+                    <button class="btn btn-primary" onclick="guardarCategoria()">Guardar Categoría</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Productos -->
+    <div id="modalProducto" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalProductoTitulo">Nuevo Producto</h3>
+                <button class="close-modal" onclick="cerrarModal('modalProducto')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre del Producto *</label>
+                    <input type="text" id="productoNombre" class="form-control" placeholder="Ej: Ramo de Rosas Rojas">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Categoría *</label>
+                    <select id="productoCategoria" class="form-control">
+                        <!-- Se llena con JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Descripción</label>
+                    <textarea id="productoDescripcion" class="form-control" rows="3" placeholder="Describe el producto"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Precio Base *</label>
+                    <input type="number" id="productoPrecio" class="form-control" placeholder="Ej: 45000">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Stock Disponible</label>
+                    <input type="number" id="productoStock" class="form-control" value="10">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Imágenes del Producto</label>
+                    <input type="file" id="productoImagenes" class="form-control" accept="image/*" multiple>
+                    <div id="productoImagenesPreview" class="image-preview"></div>
+                </div>
+                
+                <div class="d-flex justify-content-end gap-2">
+                    <button class="btn btn-danger" onclick="cerrarModal('modalProducto')">Cancelar</button>
+                    <button class="btn btn-primary" onclick="guardarProducto()">Guardar Producto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Precios -->
+    <div id="modalPrecio" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Nueva Regla de Precio</h3>
+                <button class="close-modal" onclick="cerrarModal('modalPrecio')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Nombre de la Regla *</label>
+                    <input type="text" id="reglaNombre" class="form-control" placeholder="Ej: Descuento Navidad 2024">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Tipo *</label>
+                    <select id="reglaTipo" class="form-control">
+                        <option value="descuento">Descuento (%)</option>
+                        <option value="aumento">Aumento (%)</option>
+                        <option value="fijo">Precio Fijo</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Valor *</label>
+                    <input type="number" id="reglaValor" class="form-control" placeholder="Ej: 15 (para 15%)">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Aplicar a *</label>
+                    <select id="reglaAplicar" class="form-control">
+                        <option value="todos">Todos los productos</option>
+                        <option value="categoria">Una categoría</option>
+                        <option value="producto">Productos específicos</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="reglaCategoriaContainer" style="display: none;">
+                    <label class="form-label">Seleccionar Categoría</label>
+                    <select id="reglaCategoria" class="form-control">
+                        <!-- Se llena con JavaScript -->
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Fechas de Aplicación</label>
+                    <div class="date-range">
+                        <input type="date" id="reglaInicio" class="form-control">
+                        <span>al</span>
+                        <input type="date" id="reglaFin" class="form-control">
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-end gap-2">
+                    <button class="btn btn-danger" onclick="cerrarModal('modalPrecio')">Cancelar</button>
+                    <button class="btn btn-primary" onclick="guardarReglaPrecio()">Guardar Regla</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Sistema de almacenamiento local (simula base de datos)
+        let sistema = {
+            categorias: [],
+            productos: [],
+            fotos: [],
+            temporadas: [],
+            reglasPrecio: [],
+            configuracion: {},
+            actividad: []
+        };
+
+        // Cargar datos del localStorage
+        function cargarDatos() {
+            const datos = localStorage.getItem('floristeria_sistema');
+            if (datos) {
+                sistema = JSON.parse(datos);
+            } else {
+                // Datos de ejemplo iniciales
+                inicializarDatosEjemplo();
+            }
+            actualizarDashboard();
+            cargarCategorias();
+            cargarProductos();
+            cargarGaleria();
+            cargarTemporadas();
+            cargarReglasPrecio();
+            cargarConfiguracion();
+        }
+
+        function inicializarDatosEjemplo() {
+            sistema.categorias = [
+                { id: 1, nombre: "Rosas", descripcion: "Rosas de todos los colores", estado: true, temporada: "" },
+                { id: 2, nombre: "Arreglos", descripcion: "Arreglos florales personalizados", estado: true, temporada: "" },
+                { id: 3, nombre: "Plantas", descripcion: "Plantas de interior y exterior", estado: true, temporada: "" },
+                { id: 4, nombre: "Navidad", descripcion: "Productos especiales para Navidad", estado: false, temporada: "navidad" }
+            ];
+
+            sistema.productos = [
+                { id: 1, nombre: "Ramo de Rosas Rojas", categoria: "Rosas", precio: 45000, stock: 15, estado: true, imagenes: [], descripcion: "Clásico ramo de 12 rosas rojas" },
+                { id: 2, nombre: "Arreglo Tropical", categoria: "Arreglos", precio: 55000, stock: 8, estado: true, imagenes: [], descripcion: "Colorido arreglo con flores exóticas" },
+                { id: 3, nombre: "Centro de Mesa Elegante", categoria: "Arreglos", precio: 65000, stock: 5, estado: true, imagenes: [], descripcion: "Exquisito centro de mesa para eventos" },
+                { id: 4, nombre: "Cesta de Girasoles", categoria: "Arreglos", precio: 40000, stock: 10, estado: true, imagenes: [], descripcion: "Radiante cesta con girasoles frescos" }
+            ];
+
+            sistema.temporadas = [
+                { id: 1, nombre: "Navidad 2024", inicio: "2024-12-01", fin: "2024-12-31", categorias: ["Navidad"], estado: false },
+                { id: 2, nombre: "San Valentín 2025", inicio: "2025-02-01", fin: "2025-02-14", categorias: ["Rosas", "Arreglos"], estado: true }
+            ];
+
+            sistema.reglasPrecio = [
+                { id: 1, nombre: "Descuento Navidad", tipo: "descuento", valor: 15, aplicar: "categoria", categoria: "Navidad", inicio: "2024-12-01", fin: "2024-12-31", estado: true },
+                { id: 2, nombre: "Aumento San Valentín", tipo: "aumento", valor: 10, aplicar: "todos", inicio: "2025-02-01", fin: "2025-02-14", estado: true }
+            ];
+
+            sistema.configuracion = {
+                nombreNegocio: "Floristería Santa Bárbara",
+                whatsapp: "573001234567",
+                horario: "Lunes a Sábado 8am - 7pm",
+                direccion: "Av. Principal #123, Ciudad",
+                colorPrincipal: "#2e7d32"
+            };
+
+            sistema.actividad = [
+                { accion: "Producto creado", detalle: "Ramo de Rosas Rojas", fecha: new Date().toISOString() },
+                { accion: "Categoría creada", detalle: "Rosas", fecha: new Date().toISOString() }
+            ];
+
+            guardarDatos();
+        }
+
+        function guardarDatos() {
+            localStorage.setItem('floristeria_sistema', JSON.stringify(sistema));
+        }
+
+        function agregarActividad(accion, detalle) {
+            sistema.actividad.unshift({
+                accion,
+                detalle,
+                fecha: new Date().toISOString()
+            });
+            // Mantener solo las últimas 10 actividades
+            sistema.actividad = sistema.actividad.slice(0, 10);
+            guardarDatos();
+            cargarActividadReciente();
+        }
+
+        // Dashboard
+        function actualizarDashboard() {
+            document.getElementById('totalProductos').textContent = sistema.productos.filter(p => p.estado).length;
+            document.getElementById('totalCategorias').textContent = sistema.categorias.filter(c => c.estado).length;
+            document.getElementById('totalFotos').textContent = sistema.fotos.length;
+            document.getElementById('temporadasActivas').textContent = sistema.temporadas.filter(t => t.estado).length;
+
+            // Gráfico de productos por categoría
+            const ctx = document.createElement('canvas');
+            document.getElementById('productosPorCategoria').innerHTML = '';
+            document.getElementById('productosPorCategoria').appendChild(ctx);
+
+            const categorias = sistema.categorias.filter(c => c.estado).map(c => c.nombre);
+            const productosPorCategoria = categorias.map(categoria => 
+                sistema.productos.filter(p => p.categoria === categoria && p.estado).length
+            );
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: categorias,
+                    datasets: [{
+                        label: 'Productos',
+                        data: productosPorCategoria,
+                        backgroundColor: categorias.map(() => `hsl(${Math.random() * 360}, 70%, 70%)`)
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            cargarActividadReciente();
+        }
+
+        function cargarActividadReciente() {
+            const tbody = document.getElementById('actividadReciente');
+            tbody.innerHTML = '';
+            
+            sistema.actividad.slice(0, 5).forEach(act => {
+                const fecha = new Date(act.fecha).toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${act.accion}</td>
+                        <td>${act.detalle}</td>
+                        <td>${fecha}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Sistema de tabs
+        document.querySelectorAll('.sidebar-menu a').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Actualizar tabs activos
+                document.querySelectorAll('.sidebar-menu a').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Mostrar contenido correspondiente
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+                
+                // Actualizar título de la página
+                document.title = `Floristería Santa Bárbara | ${this.querySelector('span').textContent}`;
+            });
+        });
+
+        // Tabs de galería
+        document.querySelectorAll('[data-gallery-tab]').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-gallery-tab');
+                
+                // Actualizar botones activos
+                document.querySelectorAll('[data-gallery-tab]').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Mostrar contenido correspondiente
+                document.querySelectorAll('.gallery-tab').forEach(tab => {
+                    tab.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Categorías
+        let categoriaEditando = null;
+
+        function cargarCategorias() {
+            const tbody = document.getElementById('tablaCategorias');
+            tbody.innerHTML = '';
+            
+            sistema.categorias.forEach(categoria => {
+                const productosCount = sistema.productos.filter(p => p.categoria === categoria.nombre).length;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${categoria.id}</td>
+                        <td><strong>${categoria.nombre}</strong></td>
+                        <td>${categoria.descripcion}</td>
+                        <td>
+                            <span class="badge ${categoria.estado ? 'badge-success' : 'badge-danger'}">
+                                ${categoria.estado ? 'Activa' : 'Inactiva'}
+                            </span>
+                        </td>
+                        <td>${productosCount} productos</td>
+                        <td>${categoria.temporada || 'Todo el año'}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="editarCategoria(${categoria.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="eliminarCategoria(${categoria.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            actualizarDashboard();
+        }
+
+        function mostrarModalCategoria(editarId = null) {
+            categoriaEditando = editarId;
+            const modal = document.getElementById('modalCategoria');
+            const titulo = document.getElementById('modalCategoriaTitulo');
+            
+            if (editarId) {
+                titulo.textContent = 'Editar Categoría';
+                const categoria = sistema.categorias.find(c => c.id === editarId);
+                
+                document.getElementById('categoriaNombre').value = categoria.nombre;
+                document.getElementById('categoriaDescripcion').value = categoria.descripcion;
+                document.getElementById('categoriaEstado').checked = categoria.estado;
+                document.getElementById('estadoTexto').textContent = categoria.estado ? 'Activa' : 'Inactiva';
+                document.getElementById('categoriaTemporada').value = categoria.temporada || '';
+            } else {
+                titulo.textContent = 'Nueva Categoría';
+                document.getElementById('categoriaNombre').value = '';
+                document.getElementById('categoriaDescripcion').value = '';
+                document.getElementById('categoriaEstado').checked = true;
+                document.getElementById('estadoTexto').textContent = 'Activa';
+                document.getElementById('categoriaTemporada').value = '';
+            }
+            
+            // Cargar temporadas en select
+            const select = document.getElementById('categoriaTemporada');
+            select.innerHTML = '<option value="">Todo el año</option>';
+            sistema.temporadas.forEach(temporada => {
+                select.innerHTML += `<option value="${temporada.nombre}">${temporada.nombre}</option>`;
+            });
+            
+            modal.style.display = 'block';
+        }
+
+        function guardarCategoria() {
+            const nombre = document.getElementById('categoriaNombre').value;
+            const descripcion = document.getElementById('categoriaDescripcion').value;
+            const estado = document.getElementById('categoriaEstado').checked;
+            const temporada = document.getElementById('categoriaTemporada').value;
+            
+            if (!nombre) {
+                alert('Por favor ingresa el nombre de la categoría');
+                return;
+            }
+            
+            if (categoriaEditando) {
+                // Editar categoría existente
+                const index = sistema.categorias.findIndex(c => c.id === categoriaEditando);
+                sistema.categorias[index] = {
+                    ...sistema.categorias[index],
+                    nombre,
+                    descripcion,
+                    estado,
+                    temporada
+                };
+                
+                agregarActividad('Categoría actualizada', nombre);
+            } else {
+                // Nueva categoría
+                const nuevoId = sistema.categorias.length > 0 ? 
+                    Math.max(...sistema.categorias.map(c => c.id)) + 1 : 1;
+                
+                sistema.categorias.push({
+                    id: nuevoId,
+                    nombre,
+                    descripcion,
+                    estado,
+                    temporada
+                });
+                
+                agregarActividad('Categoría creada', nombre);
+            }
+            
+            guardarDatos();
+            cargarCategorias();
+            cerrarModal('modalCategoria');
+        }
+
+        function editarCategoria(id) {
+            mostrarModalCategoria(id);
+        }
+
+        function eliminarCategoria(id) {
+            if (confirm('¿Estás seguro de eliminar esta categoría? Los productos asociados quedarán sin categoría.')) {
+                sistema.categorias = sistema.categorias.filter(c => c.id !== id);
+                
+                // Actualizar productos que tenían esta categoría
+                sistema.productos.forEach(producto => {
+                    if (producto.categoria === sistema.categorias.find(c => c.id === id)?.nombre) {
+                        producto.categoria = '';
+                    }
+                });
+                
+                guardarDatos();
+                cargarCategorias();
+                cargarProductos();
+                agregarActividad('Categoría eliminada', `ID: ${id}`);
+            }
+        }
+
+        // Productos
+        let productoEditando = null;
+
+        function cargarProductos() {
+            const tbody = document.getElementById('tablaProductos');
+            tbody.innerHTML = '';
+            
+            sistema.productos.forEach(producto => {
+                // Calcular precio actual considerando reglas activas
+                let precioActual = producto.precio;
+                const hoy = new Date().toISOString().split('T')[0];
+                
+                sistema.reglasPrecio.forEach(regla => {
+                    if (regla.estado && hoy >= regla.inicio && hoy <= regla.fin) {
+                        if (regla.aplicar === 'todos' || 
+                            (regla.aplicar === 'categoria' && regla.categoria === producto.categoria)) {
+                            
+                            if (regla.tipo === 'descuento') {
+                                precioActual = producto.precio * (1 - regla.valor / 100);
+                            } else if (regla.tipo === 'aumento') {
+                                precioActual = producto.precio * (1 + regla.valor / 100);
+                            } else if (regla.tipo === 'fijo') {
+                                precioActual = regla.valor;
+                            }
+                        }
+                    }
+                });
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td>${producto.id}</td>
+                        <td>
+                            ${producto.imagenes && producto.imagenes.length > 0 ? 
+                                `<img src="${producto.imagenes[0]}" width="50" height="50" style="object-fit: cover; border-radius: 5px;">` : 
+                                `<i class="fas fa-image" style="color: #ccc;"></i>`
+                            }
+                        </td>
+                        <td><strong>${producto.nombre}</strong></td>
+                        <td>${producto.categoria || 'Sin categoría'}</td>
+                        <td>$${producto.precio.toLocaleString()}</td>
+                        <td>$${Math.round(precioActual).toLocaleString()}</td>
+                        <td>
+                            <span class="badge ${producto.estado ? 'badge-success' : 'badge-danger'}">
+                                ${producto.estado ? 'Activo' : 'Inactivo'}
+                            </span>
+                        </td>
+                        <td>${producto.stock}</td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="editarProducto(${producto.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${producto.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            actualizarDashboard();
+        }
+
+        function mostrarModalProducto(editarId = null) {
+            productoEditando = editarId;
+            const modal = document.getElementById('modalProducto');
+            const titulo = document.getElementById('modalProductoTitulo');
+            
+            // Cargar categorías en select
+            const selectCategoria = document.getElementById('productoCategoria');
+            selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
+            sistema.categorias.filter(c => c.estado).forEach(categoria => {
+                selectCategoria.innerHTML += `<option value="${categoria.nombre}">${categoria.nombre}</option>`;
+            });
+            
+            if (editarId) {
+                titulo.textContent = 'Editar Producto';
+                const producto = sistema.productos.find(p => p.id === editarId);
+                
+                document.getElementById('productoNombre').value = producto.nombre;
+                document.getElementById('productoCategoria').value = producto.categoria;
+                document.getElementById('productoDescripcion').value = producto.descripcion;
+                document.getElementById('productoPrecio').value = producto.precio;
+                document.getElementById('productoStock').value = producto.stock;
+                
+                // Mostrar imágenes existentes
+                const preview = document.getElementById('productoImagenesPreview');
+                preview.innerHTML = '';
+                if (producto.imagenes && producto.imagenes.length > 0) {
+                    producto.imagenes.forEach((img, index) => {
+                        preview.innerHTML += `
+                            <div class="preview-image">
+                                <img src="${img}" alt="Imagen ${index + 1}">
+                                <button class="remove-btn" onclick="eliminarImagenProducto(${editarId}, ${index})">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        `;
+                    });
+                }
+            } else {
+                titulo.textContent = 'Nuevo Producto';
+                document.getElementById('productoNombre').value = '';
+                document.getElementById('productoCategoria').value = '';
+                document.getElementById('productoDescripcion').value = '';
+                document.getElementById('productoPrecio').value = '';
+                document.getElementById('productoStock').value = '10';
+                document.getElementById('productoImagenesPreview').innerHTML = '';
+            }
+            
+            modal.style.display = 'block';
+        }
+
+        function guardarProducto() {
+            const nombre = document.getElementById('productoNombre').value;
+            const categoria = document.getElementById('productoCategoria').value;
+            const descripcion = document.getElementById('productoDescripcion').value;
+            const precio = parseFloat(document.getElementById('productoPrecio').value);
+            const stock = parseInt(document.getElementById('productoStock').value);
+            
+            if (!nombre || !categoria || !precio) {
+                alert('Por favor completa los campos obligatorios (Nombre, Categoría y Precio)');
+                return;
+            }
+            
+            if (productoEditando) {
+                // Editar producto existente
+                const index = sistema.productos.findIndex(p => p.id === productoEditando);
+                sistema.productos[index] = {
+                    ...sistema.productos[index],
+                    nombre,
+                    categoria,
+                    descripcion,
+                    precio,
+                    stock,
+                    estado: sistema.productos[index].estado
+                };
+                
+                agregarActividad('Producto actualizado', nombre);
+            } else {
+                // Nuevo producto
+                const nuevoId = sistema.productos.length > 0 ? 
+                    Math.max(...sistema.productos.map(p => p.id)) + 1 : 1;
+                
+                sistema.productos.push({
+                    id: nuevoId,
+                    nombre,
+                    categoria,
+                    descripcion,
+                    precio,
+                    stock,
+                    estado: true,
+                    imagenes: []
+                });
+                
+                agregarActividad('Producto creado', nombre);
+            }
+            
+            guardarDatos();
+            cargarProductos();
+            cerrarModal('modalProducto');
+        }
+
+        function editarProducto(id) {
+            mostrarModalProducto(id);
+        }
+
+        function eliminarProducto(id) {
+            if (confirm('¿Estás seguro de eliminar este producto?')) {
+                sistema.productos = sistema.productos.filter(p => p.id !== id);
+                guardarDatos();
+                cargarProductos();
+                agregarActividad('Producto eliminado', `ID: ${id}`);
+            }
+        }
+
+        function eliminarImagenProducto(productoId, imagenIndex) {
+            const producto = sistema.productos.find(p => p.id === productoId);
+            if (producto && producto.imagenes) {
+                producto.imagenes.splice(imagenIndex, 1);
+                guardarDatos();
+                mostrarModalProducto(productoId);
+                agregarActividad('Imagen eliminada', `Producto ID: ${productoId}`);
+            }
+        }
+
+        // Galería
+        let imagenesParaSubir = [];
+
+        function previewImages(event) {
+            const files = event.target.files;
+            imagenesParaSubir = Array.from(files);
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            imagenesParaSubir.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML += `
+                        <div class="preview-image">
+                            <img src="${e.target.result}" alt="Preview ${index + 1}">
+                            <button class="remove-btn" onclick="eliminarPreview(${index})">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            document.getElementById('btnSubirFotos').disabled = imagenesParaSubir.length === 0;
+        }
+
+        function eliminarPreview(index) {
+            imagenesParaSubir.splice(index, 1);
+            previewImages({ target: { files: imagenesParaSubir } });
+        }
+
+        function subirFotos() {
+            const categoria = document.getElementById('categoriaFoto').value;
+            
+            imagenesParaSubir.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const nuevoId = sistema.fotos.length > 0 ? 
+                        Math.max(...sistema.fotos.map(f => f.id)) + 1 : 1;
+                    
+                    sistema.fotos.push({
+                        id: nuevoId,
+                        url: e.target.result,
+                        categoria,
+                        fecha: new Date().toISOString(),
+                        destacada: false
+                    });
+                    
+                    if (index === imagenesParaSubir.length - 1) {
+                        guardarDatos();
+                        cargarGaleria();
+                        imagenesParaSubir = [];
+                        document.getElementById('imagePreview').innerHTML = '';
+                        document.getElementById('btnSubirFotos').disabled = true;
+                        document.getElementById('fileInput').value = '';
+                        
+                        agregarActividad('Fotos subidas', `${imagenesParaSubir.length} fotos a ${categoria}`);
+                        alert(`${imagenesParaSubir.length} fotos subidas correctamente`);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function cargarGaleria() {
+            const galeria = document.getElementById('galeriaFotos');
+            const destacadas = document.getElementById('fotosDestacadas');
+            
+            galeria.innerHTML = '';
+            destacadas.innerHTML = '';
+            
+            sistema.fotos.forEach(foto => {
+                const col = document.createElement('div');
+                col.className = 'col-md-3 mb-4';
+                col.innerHTML = `
+                    <div class="preview-image">
+                        <img src="${foto.url}" alt="Foto ${foto.id}" style="height: 200px;">
+                        <div style="position: absolute; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.7); color: white; padding: 5px 10px; display: flex; justify-content: space-between; align-items: center;">
+                            <span>${foto.categoria}</span>
+                            <div>
+                                <button class="btn btn-sm ${foto.destacada ? 'btn-warning' : 'btn-success'}" onclick="toggleDestacada(${foto.id})">
+                                    <i class="fas fa-star"></i>
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="eliminarFoto(${foto.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                galeria.appendChild(col);
+                
+                if (foto.destacada) {
+                    const colDest = document.createElement('div');
+                    colDest.className = 'col-md-3 mb-4';
+                    colDest.innerHTML = `
+                        <div class="preview-image">
+                            <img src="${foto.url}" alt="Foto destacada ${foto.id}" style="height: 200px;">
+                            <div style="position: absolute; top: 5px; right: 5px;">
+                                <button class="btn btn-sm btn-danger" onclick="toggleDestacada(${foto.id})">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    destacadas.appendChild(colDest);
+                }
+            });
+            
+            actualizarDashboard();
+        }
+
+        function toggleDestacada(id) {
+            const foto = sistema.fotos.find(f => f.id === id);
+            if (foto) {
+                foto.destacada = !foto.destacada;
+                guardarDatos();
+                cargarGaleria();
+                agregarActividad('Foto destacada cambiada', `Foto ID: ${id}`);
+            }
+        }
+
+        function eliminarFoto(id) {
+            if (confirm('¿Estás seguro de eliminar esta foto?')) {
+                sistema.fotos = sistema.fotos.filter(f => f.id !== id);
+                guardarDatos();
+                cargarGaleria();
+                agregarActividad('Foto eliminada', `ID: ${id}`);
+            }
+        }
+
+        // Temporadas
+        function cargarTemporadas() {
+            const tbody = document.getElementById('tablaTemporadas');
+            const container = document.getElementById('categoriasTemporada');
+            
+            tbody.innerHTML = '';
+            container.innerHTML = '';
+            
+            sistema.temporadas.forEach(temporada => {
+                const hoy = new Date().toISOString().split('T')[0];
+                const activa = temporada.estado && hoy >= temporada.inicio && hoy <= temporada.fin;
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${temporada.nombre}</strong></td>
+                        <td>${temporada.inicio} al ${temporada.fin}</td>
+                        <td>${temporada.categorias.join(', ') || 'Ninguna'}</td>
+                        <td>
+                            <span class="badge ${activa ? 'badge-success' : 'badge-danger'}">
+                                ${activa ? 'Activa' : 'Inactiva'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="editarTemporada(${temporada.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="eliminarTemporada(${temporada.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            // Cargar categorías para selección
+            sistema.categorias.forEach(categoria => {
+                container.innerHTML += `
+                    <div style="margin-bottom: 5px;">
+                        <label>
+                            <input type="checkbox" value="${categoria.nombre}" class="categoria-checkbox">
+                            ${categoria.nombre}
+                        </label>
+                    </div>
+                `;
+            });
+            
+            actualizarDashboard();
+        }
+
+        function guardarTemporada() {
+            const nombre = document.getElementById('nombreTemporada').value;
+            const inicio = document.getElementById('inicioTemporada').value;
+            const fin = document.getElementById('finTemporada').value;
+            
+            if (!nombre || !inicio || !fin) {
+                alert('Por favor completa todos los campos');
+                return;
+            }
+            
+            const categoriasSeleccionadas = Array.from(document.querySelectorAll('.categoria-checkbox:checked'))
+                .map(cb => cb.value);
+            
+            const nuevoId = sistema.temporadas.length > 0 ? 
+                Math.max(...sistema.temporadas.map(t => t.id)) + 1 : 1;
+            
+            sistema.temporadas.push({
+                id: nuevoId,
+                nombre,
+                inicio,
+                fin,
+                categorias: categoriasSeleccionadas,
+                estado: true
+            });
+            
+            guardarDatos();
+            cargarTemporadas();
+            
+            // Limpiar formulario
+            document.getElementById('nombreTemporada').value = '';
+            document.getElementById('inicioTemporada').value = '';
+            document.getElementById('finTemporada').value = '';
+            
+            agregarActividad('Temporada creada', nombre);
+        }
+
+        function editarTemporada(id) {
+            const temporada = sistema.temporadas.find(t => t.id === id);
+            if (temporada) {
+                document.getElementById('nombreTemporada').value = temporada.nombre;
+                document.getElementById('inicioTemporada').value = temporada.inicio;
+                document.getElementById('finTemporada').value = temporada.fin;
+                
+                // Marcar checkboxes correspondientes
+                document.querySelectorAll('.categoria-checkbox').forEach(cb => {
+                    cb.checked = temporada.categorias.includes(cb.value);
+                });
+            }
+        }
+
+        function eliminarTemporada(id) {
+            if (confirm('¿Estás seguro de eliminar esta temporada?')) {
+                sistema.temporadas = sistema.temporadas.filter(t => t.id !== id);
+                guardarDatos();
+                cargarTemporadas();
+                agregarActividad('Temporada eliminada', `ID: ${id}`);
+            }
+        }
+
+        // Precios
+        function cargarReglasPrecio() {
+            const tbody = document.getElementById('tablaPrecios');
+            tbody.innerHTML = '';
+            
+            sistema.reglasPrecio.forEach(regla => {
+                const hoy = new Date().toISOString().split('T')[0];
+                const activa = regla.estado && hoy >= regla.inicio && hoy <= regla.fin;
+                
+                let aplicarTexto = '';
+                if (regla.aplicar === 'todos') {
+                    aplicarTexto = 'Todos los productos';
+                } else if (regla.aplicar === 'categoria') {
+                    aplicarTexto = `Categoría: ${regla.categoria}`;
+                } else if (regla.aplicar === 'producto') {
+                    aplicarTexto = 'Productos específicos';
+                }
+                
+                tbody.innerHTML += `
+                    <tr>
+                        <td><strong>${regla.nombre}</strong></td>
+                        <td>${regla.tipo === 'descuento' ? 'Descuento' : regla.tipo === 'aumento' ? 'Aumento' : 'Precio Fijo'}</td>
+                        <td>${aplicarTexto}</td>
+                        <td>${regla.tipo === 'fijo' ? `$${regla.valor}` : `${regla.valor}%`}</td>
+                        <td>${regla.inicio} al ${regla.fin}</td>
+                        <td>
+                            <span class="badge ${activa ? 'badge-success' : 'badge-danger'}">
+                                ${activa ? 'Activa' : 'Inactiva'}
+                            </span>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-warning" onclick="editarReglaPrecio(${regla.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-danger" onclick="eliminarReglaPrecio(${regla.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function mostrarModalPrecio() {
+            const modal = document.getElementById('modalPrecio');
+            const selectCategoria = document.getElementById('reglaCategoria');
+            
+            // Cargar categorías
+            selectCategoria.innerHTML = '<option value="">Seleccionar categoría</option>';
+            sistema.categorias.forEach(categoria => {
+                selectCategoria.innerHTML += `<option value="${categoria.nombre}">${categoria.nombre}</option>`;
+            });
+            
+            // Mostrar/ocultar campo de categoría según selección
+            document.getElementById('reglaAplicar').addEventListener('change', function() {
+                document.getElementById('reglaCategoriaContainer').style.display = 
+                    this.value === 'categoria' ? 'block' : 'none';
+            });
+            
+            modal.style.display = 'block';
+        }
+
+        function guardarReglaPrecio() {
+            const nombre = document.getElementById('reglaNombre').value;
+            const tipo = document.getElementById('reglaTipo').value;
+            const valor = parseFloat(document.getElementById('reglaValor').value);
+            const aplicar = document.getElementById('reglaAplicar').value;
+            const categoria = aplicar === 'categoria' ? document.getElementById('reglaCategoria').value : null;
+            const inicio = document.getElementById('reglaInicio').value;
+            const fin = document.getElementById('reglaFin').value;
+            
+            if (!nombre || !valor || !inicio || !fin) {
+                alert('Por favor completa todos los campos obligatorios');
+                return;
+            }
+            
+            const nuevoId = sistema.reglasPrecio.length > 0 ? 
+                Math.max(...sistema.reglasPrecio.map(r => r.id)) + 1 : 1;
+            
+            sistema.reglasPrecio.push({
+                id: nuevoId,
+                nombre,
+                tipo,
+                valor,
+                aplicar,
+                categoria,
+                inicio,
+                fin,
+                estado: true
+            });
+            
+            guardarDatos();
+            cargarReglasPrecio();
+            cargarProductos(); // Para actualizar precios
+            cerrarModal('modalPrecio');
+            
+            agregarActividad('Regla de precio creada', nombre);
+        }
+
+        function editarReglaPrecio(id) {
+            // Implementar edición similar a otras funciones
+            alert('Edición de regla de precio - Funcionalidad en desarrollo');
+        }
+
+        function eliminarReglaPrecio(id) {
+            if (confirm('¿Estás seguro de eliminar esta regla de precio?')) {
+                sistema.reglasPrecio = sistema.reglasPrecio.filter(r => r.id !== id);
+                guardarDatos();
+                cargarReglasPrecio();
+                cargarProductos();
+                agregarActividad('Regla de precio eliminada', `ID: ${id}`);
+            }
+        }
+
+        // Configuración
+        function cargarConfiguracion() {
+            document.getElementById('nombreNegocio').value = sistema.configuracion.nombreNegocio || '';
+            document.getElementById('whatsappNumber').value = sistema.configuracion.whatsapp || '';
+            document.getElementById('horario').value = sistema.configuracion.horario || '';
+            document.getElementById('direccion').value = sistema.configuracion.direccion || '';
+            
+            // Color picker
+            const colorPrincipal = sistema.configuracion.colorPrincipal || '#2e7d32';
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.getAttribute('data-color') === colorPrincipal) {
+                    option.classList.add('selected');
+                }
+            });
+        }
+
+        function guardarConfiguracion() {
+            const colorSeleccionado = document.querySelector('.color-option.selected').getAttribute('data-color');
+            
+            sistema.configuracion = {
+                nombreNegocio: document.getElementById('nombreNegocio').value,
+                whatsapp: document.getElementById('whatsappNumber').value,
+                horario: document.getElementById('horario').value,
+                direccion: document.getElementById('direccion').value,
+                colorPrincipal: colorSeleccionado
+            };
+            
+            guardarDatos();
+            agregarActividad('Configuración actualizada', 'Parámetros generales');
+            alert('Configuración guardada correctamente');
+        }
+
+        function exportarDatos() {
+            const datos = JSON.stringify(sistema, null, 2);
+            const blob = new Blob([datos], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `floristeria_backup_${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            agregarActividad('Datos exportados', 'Backup completo');
+        }
+
+        function importarDatos() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const datos = JSON.parse(e.target.result);
+                        sistema = datos;
+                        guardarDatos();
+                        cargarDatos();
+                        alert('Datos importados correctamente');
+                        agregarActividad('Datos importados', 'Restauración completa');
+                    } catch (error) {
+                        alert('Error al importar datos: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        // Utilidades
+        function cerrarModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            categoriaEditando = null;
+            productoEditando = null;
+        }
+
+        // Color picker
+        document.querySelectorAll('.color-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+
+        // Switch de estado
+        document.getElementById('categoriaEstado').addEventListener('change', function() {
+            document.getElementById('estadoTexto').textContent = this.checked ? 'Activa' : 'Inactiva';
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarDatos();
+            
+            // Configurar fecha mínima para inputs de fecha
+            const hoy = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                if (!input.id.includes('inicio')) { // No aplicar a fechas de inicio
+                    input.min = hoy;
+                }
+            });
+        });
+
+        // Cerrar modal haciendo clic fuera
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                categoriaEditando = null;
+                productoEditando = null;
+            }
+        });
+    </script>
+</body>
+</html>
